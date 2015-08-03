@@ -12,3 +12,6 @@ class Position(object):
 				     (self.x_coord - 1, self.y_coord + 1, self.z_coord),
 				     (self.x_coord, self.y_coord + 1, self.z_coord - 1)]
 		return [formula for formula in adj_spot_formulae]
+
+def are_adjacent(position1, position2):
+	return position1 in position2.adjacent_spots()
