@@ -3,10 +3,10 @@ from Tkinter import Tk, Canvas, Frame, BOTH
 import math
 from main import Position
 
-class Example(Frame):
+class HexGrid(Frame):
      
     def translate_adj_spots(self, x, y, z, r):
-	p = Position(x,y,z)
+	p = Position(x,y,z,r)
 	adjacent_spots = p.adjacent_spots()
 	spots = [(spot[0]-x, spot[1]-y, spot[2]-z) for spot in adjacent_spots]	
 	adj_coordinates = []
@@ -60,10 +60,10 @@ class Example(Frame):
 
 def main():
   
-    root = Tk()
-    ex = Example(root)
-    root.geometry("500x500+300+300")
-    root.mainloop()  
+    window = Tk()
+    ex = HexGrid(window)
+    window.geometry("1000x1000+300+300")
+    window.mainloop()  
 
 
 if __name__ == '__main__':
