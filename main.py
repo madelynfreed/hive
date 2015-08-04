@@ -1,8 +1,9 @@
 class Position(object):
-	def __init__(self, x_coord, y_coord, z_coord):	
+	def __init__(self, x_coord, y_coord, z_coord, r):	
 		self.x_coord = x_coord
 		self.y_coord = y_coord		
 		self.z_coord = z_coord		
+		self.r = r		
 	
 	def adjacent_spots(self):
 		adj_spot_formulae = [(self.x_coord + 1, self.y_coord, self.z_coord - 1),
