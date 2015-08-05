@@ -5,9 +5,8 @@ from main import Position
 
 class HexGrid(Frame):
      
-    def translate_adj_spots(self, x, y, z, r):
-	p = Position(x,y,z,r)
-	adjacent_spots = p.adjacent_spots()
+    def translate_adj_spots(self):
+	adjacent_spots = self.Pos.adjacent_spots()
 	spots = [(spot[0]-x, spot[1]-y, spot[2]-z) for spot in adjacent_spots]	
 	adj_coordinates = []
 	for spot in spots:
@@ -26,15 +25,16 @@ class HexGrid(Frame):
 	return adj_coordinates			
 
 
-    def __init__(self, parent):
+    def __init__(self, parent, position_object):
         Frame.__init__(self, parent)   
-         
+        self.Pos = position_object
         self.parent = parent        
         self.initUI()
+
         
-    def draw_polygons(self,x_coord,y_coord,r,canvas):
+    def draw_polygons(self,x_coord,y_coord,canvas):
 	
-	point_reference = [x_coord+0.5*r, y_coord-(math.sqrt(3)*0.5*r), x_coord+r, y_coord, x_coord+.5*r, y_coord+(math.sqrt(3)*0.5*r), x_coord-.5*r, y_coord+(math.sqrt(3)*0.5*r), x_coord-r, y_coord, x_coord-.5*r, y_coord-(math.sqrt(3)*0.5*r)]
+	point_reference = [x_coord+0.5*self.Pos.r, y_coord-(math.sqrt(3)*0.5*self.Pos.r), x_coord+self.Pos.r, y_coord, x_coord+.5*self.Pos.r, y_coord+(math.sqrt(3)*0.5*self.Pos.r), x_coord-.5*self.Pos.r, y_coord+(math.sqrt(3)*0.5*self.Pos.r), x_coord-self.Pos.r, y_coord, x_coord-.5*self.Pos.r, y_coord-(math.sqrt(3)*0.5*self.Pos.r)]
 	canvas.create_polygon(point_reference, outline='red',fill='green',width=2)
 	
     def initUI(self):
@@ -61,8 +61,13 @@ class HexGrid(Frame):
 def main():
   
     window = Tk()
+<<<<<<< HEAD
     ex = HexGrid(window)
     window.geometry("1000x1000+300+300")
+=======
+    hex = HexGrid(window,Position(0,0,0,60)
+    #window.geometry("1000x1000+300+300")
+>>>>>>> checkpoint
     window.mainloop()  
 
 
