@@ -46,11 +46,11 @@ class HexGrid(object):
 
 
 
-def main():
+def main(position_objects):
 	window = Tk()
 	can = Canvas(window, width=500, height=500)
 	can.pack()
-	Pos = Position(0,0,0,60)
+	Pos = position_objects[0]
 	hex = HexGrid(100,100,Pos,can)
 	
 	window.mainloop()

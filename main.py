@@ -1,3 +1,4 @@
+import math
 class Position(object):
 	def __init__(self, x_coord, y_coord, z_coord, r):	
 		self.x_coord = x_coord
@@ -14,5 +15,9 @@ class Position(object):
 				     (self.x_coord, self.y_coord + 1, self.z_coord - 1)]
 		return [formula for formula in adj_spot_formulae]
 
+	def translate_position_to_pixels(self):
+		a_coord = (3.0/2.0)*self.r*self.y_coord
+		b_coord = math.sqrt(3)*self.r*(b/2.0 + self.r)
+		return (a_coord, b_coord)
 def are_adjacent(position1, position2):
 	return (position1.x_coord, position1.y_coord, position1.z_coord) in position2.adjacent_spots()
