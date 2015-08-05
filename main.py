@@ -16,8 +16,8 @@ class Position(object):
 		return [formula for formula in adj_spot_formulae]
 
 	def translate_position_to_pixels(self):
-		a_coord = (3.0/2.0)*self.r*self.y_coord
-		b_coord = math.sqrt(3)*self.r*(b/2.0 + self.r)
+		a_coord = (3.0/2.0)*self.r*self.z_coord
+		b_coord = math.sqrt(3)*self.r*(self.z_coord/2.0 + self.x_coord)
 		return (a_coord, b_coord)
 def are_adjacent(position1, position2):
 	return (position1.x_coord, position1.y_coord, position1.z_coord) in position2.adjacent_spots()

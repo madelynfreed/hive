@@ -14,7 +14,7 @@ class TestHive(unittest.TestCase):
 		b = Position(-1, 4, -3,10)
 		self.assertTrue(main.are_adjacent(a, b))
 	def test_translate_position_to_pixels(self):
-		hive_canvas.main([Position(1,2,-3,10)])
+		hive_canvas.main([Position(1,-2,1,101)])
 		self.assertTrue(False)
 		
 if __name__ == '__main__':

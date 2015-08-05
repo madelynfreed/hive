@@ -51,8 +51,12 @@ def main(position_objects):
 	can = Canvas(window, width=500, height=500)
 	can.pack()
 	Pos = position_objects[0]
-	hex = HexGrid(100,100,Pos,can)
-	
+	a = Pos.translate_position_to_pixels()[0]
+	print a
+	b = Pos.translate_position_to_pixels()[1]
+	print b
+	hex = HexGrid(a,b,Pos,can)
+
 	window.mainloop()
 
 if __name__ == '__main__':
