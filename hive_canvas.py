@@ -3,39 +3,45 @@ import math
 from main import Position
 
 class HexGrid(object):
-	def __init__(self, a_coord, b_coord, postion_object, canvas):
-		self.a_coord = a_coord
-		self.b_coord = b_coord
-		self.P = postion_object
+	def __init__(self, coord_list, radius, canvas):
+		self.radius = radius	
+		self.coord_list = coord_list
 		self.canvas = canvas
-		self.draw_polygon(self.a_coord, self.b_coord)
-	def translate_adj_spots(self):
-		adjacent_spots = self.P.adjacent_spots()
-		spots = [(spot[0]-x, spot[1]-y, spot[2]-z) for spot in adjacent_spots]
-		adj_coordinates = []
-		for spot in spots:
-			if spot == (0,1,-1):
-				adj_coordinates.append((0,math.sqrt(3)*r))
-			elif spot == (1,0,-1):
-				adj_coordinates.append((1.5*r,(math.sqrt(3)/2)*r))
-			elif spot == (1,-1,0):
-				adj_coordinates.append((1.5*r,-(math.sqrt(3)/2)*r))
-			elif spot == (0,-1,1):
-				adj_coordinates.append((0,-math.sqrt(3)*r))
-			elif spot == (-1,0,1):
-				adj_coordinates.append((-1.5*r,-(math.sqrt(3)/2)*r))
-			elif spot == (-1,1,0):
-				adj_coordinates.append((-1.5*r,(math.sqrt(3)/2)*r))
-		return adj_coordinates
+		for coord in self.coord_list:
+			print "coord!!!!"
+			print coord
+			self.draw_polygon(coord[0], coord[1])
+	#def translate_adj_spots(self):
+		#adjacent_spots = self.P.adjacent_spots()
+		#spots = [(spot[0]-x, spot[1]-y, spot[2]-z) for spot in adjacent_spots]
+		#adj_coordinates = []
+		#for spot in spots:
+			#if spot == (0,1,-1):
+				#adj_coordinates.append((0,math.sqrt(3)*r))
+			#elif spot == (1,0,-1):
+				#adj_coordinates.append((1.5*r,(math.sqrt(3)/2)*r))
+			#elif spot == (1,-1,0):
+				#adj_coordinates.append((1.5*r,-(math.sqrt(3)/2)*r))
+			#elif spot == (0,-1,1):
+				#adj_coordinates.append((0,-math.sqrt(3)*r))
+			#elif spot == (-1,0,1):
+				#adj_coordinates.append((-1.5*r,-(math.sqrt(3)/2)*r))
+			#elif spot == (-1,1,0):
+				#adj_coordinates.append((-1.5*r,(math.sqrt(3)/2)*r))
+		#return adj_coordinates
 		
 	def draw_polygon(self,a_coo,b_coo):
-		point_reference = [a_coo+0.5*self.P.r, b_coo-(math.sqrt(3)*0.5*self.P.r),
-			 a_coo+self.P.r, b_coo,
-			 a_coo+.5*self.P.r, b_coo+(math.sqrt(3)*0.5*self.P.r),
-			 a_coo-.5*self.P.r, b_coo+(math.sqrt(3)*0.5*self.P.r),
-			 a_coo-self.P.r, b_coo,
-			 a_coo-.5*self.P.r, b_coo-(math.sqrt(3)*0.5*self.P.r)]
+		print a_coo, b_coo
+		point_reference = [a_coo+0.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius),
+			 a_coo+self.radius, b_coo,
+			 a_coo+.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
+			 a_coo-.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
+			 a_coo-self.radius, b_coo,
+			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
 		self.canvas.create_polygon(point_reference, outline='red',fill='green',width=2)
+	def draw_n_polygons(postions):
+		for position in positions:
+			self.draw_polygon(position[0],position[1])
 	def draw_neighbors(self):
 
 		tuples_to_add_to_center =  self.translate_adj_spots()
@@ -50,12 +56,9 @@ def main(position_objects):
 	window = Tk()
 	can = Canvas(window, width=500, height=500)
 	can.pack()
-	Pos = position_objects[0]
-	a = Pos.translate_position_to_pixels()[0]
-	print a
-	b = Pos.translate_position_to_pixels()[1]
-	print b
-	hex = HexGrid(a,b,Pos,can)
+	radius = position_objects[0].r
+	n_positions = [position.translate_position_to_pixels() for position in position_objects]
+	hex = HexGrid(n_positions,radius, can)
 
 	window.mainloop()
 
