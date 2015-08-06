@@ -15,7 +15,6 @@ class TestHive(unittest.TestCase):
 		b = Position(-1, 4, -3,10)
 		self.assertTrue(main.are_adjacent(a, b))
 	def test_translate_position_to_pixels(self):
-		#hive_canvas.main([Position(2,-2,0,101),Position(1,-2,1,101)])
 	
 		self.assertTrue(True)
 	def test_empty_board(self):
@@ -23,12 +22,13 @@ class TestHive(unittest.TestCase):
 		self.assertFalse(empty.space_has_piece_in_it(2,-2,0))	
 	def test_translate_wh_into_hex_coords(self):
 		e = Board(4,4,100)
-		self.assertTrue((3,3,-6) in e.translate_wh_into_hex_coords())
+		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
 
+	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
 		e = Board(100,100,4)
-		posses = [(Position(coord[0],coord[1],coord[2],e.radius)) for coord in e.translate_wh_into_hex_coords()]
-		hive_canvas.main(posses)
+		posses = [(Position(coord[0],coord[1],coord[2],e.radius),None) for coord in e.hex_grid]
+		hive_canvas.main(posses, e)
 
 if __name__ == '__main__':
 	unittest.main()
