@@ -17,7 +17,8 @@ class HexGrid(object):
 			 a_coo-.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
 			 a_coo-self.radius, b_coo,
 			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
-		self.canvas.create_polygon(point_reference, outline='red',fill='green',width=2)
+		self.canvas.create_polygon(point_reference, outline='gray',fill='',width=1)
+
 
 def main(position_objects):
 	window = Tk()
