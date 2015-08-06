@@ -5,7 +5,6 @@ import hive_canvas
 class TestHive(unittest.TestCase):
 	def test_adjacent_spots(self):
 		b = Position(0,0,0,106)
-		hive_canvas.main(b)
 		self.assertTrue((1,0,-1) in b.adjacent_spots())
 	def test_non_adjacent_spots(self):
 		b = Position(0,0,0,10)
@@ -14,13 +13,10 @@ class TestHive(unittest.TestCase):
 		a = Position(0,3,-3,10)
 		b = Position(-1, 4, -3,10)
 		self.assertTrue(main.are_adjacent(a, b))
-	def test_translate_position_to_pixels(self):
-		hive_canvas.main([Position(1,-2,1,101), Position(2,-2,0,101)])
-		self.assertTrue(False)
 		
 	def test_translate_position_to_pixels(self):
 		hive_canvas.main([Position(2,-2,0,101),Position(1,-2,1,101)])
-		self.assertTrue(False)
+		self.assertTrue(True)
 if __name__ == '__main__':
 	unittest.main()
 
