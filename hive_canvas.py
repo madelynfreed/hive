@@ -1,6 +1,7 @@
+#CANVAS
 from Tkinter import Tk, Canvas
 import math
-from main import Position
+from board import Board
 
 class HexGrid(object):
 	def __init__(self, coord_list, radius, canvas):
@@ -20,12 +21,11 @@ class HexGrid(object):
 		self.canvas.create_polygon(point_reference, outline='gray',fill='',width=1)
 
 
-def main(position_objects):
+def main(positions_and_type, radius):
 	window = Tk()
 	can = Canvas(window, width=500, height=500)
 	can.pack()
-	radius = position_objects[0].r
-	n_positions = [position.translate_position_to_pixels() for position in position_objects]
+	n_positions = [Board.translate_hex_position_to_pixels(position, radius) for position in positions_and_type]
 	hex = HexGrid(n_positions,radius, can)
 
 	window.mainloop()
