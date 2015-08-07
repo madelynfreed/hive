@@ -26,6 +26,11 @@ class TestHive(unittest.TestCase):
 		e = Board(100,100,4)
 		posses = [coord for coord in e.translate_wh_into_hex_coords()]
 		hive_canvas.main(posses, e.radius)
+	
+	def test_square_coord_and_type(self):
+		coords = (0,0)
+		ptype = None
+		self.assertTrue(Board.square_coord_and_type(coords, ptype) == (0,0,None))
 
 if __name__ == '__main__':
 	unittest.main()

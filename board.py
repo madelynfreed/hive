@@ -32,6 +32,10 @@ class Board(object):
 		a_coord = (3.0/2.0)*radius*z_coord
 		b_coord = math.sqrt(3)*radius*(z_coord/2.0 + x_coord)
 		return (a_coord, b_coord)
+	@staticmethod
+	def square_coord_and_type(square_coord, piece_type):
+		return (square_coord[0], square_coord[1], piece_type)
+		
 
 	def are_adjacent(self,hexposition1,hexposition2):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
