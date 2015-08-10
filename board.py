@@ -14,8 +14,8 @@ class Board(object):
 	def space_has_piece_in_it(self, hex_coords):
 		return False
 	
-	def place_piece(self,hex_position, piece_type):
-		self.positions.append((hex_position,piece_type)) 
+	def place_piece(self,hex_position, piece_object):
+		self.positions.append((hex_position,piece_object)) 
 		
 	def adjacent_spots(self, hex_position):
 		x_coord = hex_position[0]

@@ -19,6 +19,12 @@ class TestHive(unittest.TestCase):
 	def test_empty_board(self):
 		empty = Board(5,5,60)
 		self.assertFalse(empty.space_has_piece_in_it((2,-2,0)))	
+	def test_space_has_a_piece_in_it(self):
+		b = Board(5,5,60)
+		p = Piece('_')
+		b.positions.append(((1,-2,1),p.piece_type))
+		self.assertTrue(b.space_has_piece_in_it((1,-2,1)))
+		
 	def test_place_piece(self):
 		b = Board(5,5,60)
 		place = (2,-4,2)
@@ -32,7 +38,7 @@ class TestHive(unittest.TestCase):
 
 	@unittest.skip('dont want to always print')
 	def test_printing_board(self):
-		e = Board(100,100,4)
+		e = Board(100,100,10)
 		p = Piece('exists')
 		posses = [(coord, None) for coord in e.positions]
 		posses.append(((1,-2,1),p.piece_type))

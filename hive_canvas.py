@@ -34,7 +34,6 @@ def main(hex_positions_and_type, radius):
 	window = Tk()
 	can = Canvas(window, width=500, height=500)
 	can.pack()
-	#n_positions = [(position, None) for position in positions_and_type]
 	square_positions_and_type = [(translate_hex_position_to_pixels(pos[0],radius),pos[1]) for pos in hex_positions_and_type]
 	hex = HexGrid(square_positions_and_type,radius, can)
 
