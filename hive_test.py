@@ -22,21 +22,23 @@ class TestHive(unittest.TestCase):
 	def test_space_has_a_piece_in_it(self):
 		b = Board(5,5,60)
 		p = Piece('_')
-		b.positions.append(((1,-2,1),p.piece_type))
+		b.pos_dict[(1,-2,1)].append(p.piece_type)
 		self.assertTrue(b.space_has_piece_in_it((1,-2,1)))
 		
 	def test_place_piece(self):
 		b = Board(5,5,60)
 		place = (2,-4,2)
 		piece = Piece('some')
-		b.place_piece(place,piece.piece_type)
-		
-		self.assertIn((place,piece.piece_type), b.positions)
+		b.place_piece(place,piece)
+		self.assertIn(piece, b.pos_dict[place])
+
+	def test_move_piece(self):
+		pass
 	def test_translate_wh_into_hex_coords(self):
 		e = Board(4,4,100)
 		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
 
-	@unittest.skip('dont want to always print')
+	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
 		e = Board(100,100,10)
 		p = Piece('exists')
