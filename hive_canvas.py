@@ -19,10 +19,21 @@ class HexGrid(object):
 			 a_coo-self.radius, b_coo,
 			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
 		if piece_type == None:
-			self.canvas.create_polygon(point_reference, outline='gray',fill='',width=1)
+			self.canvas.create_polygon(point_reference, 
+						outline='gray',
+						fill='',width=1)
 		else:
-			self.canvas.create_polygon(point_reference, outline='gray',fill='red',width=1)
+			self.canvas.create_polygon(point_reference, 
+						   outline='gray',
+						   fill='red',width=1)
 
+	def find_closest_hexagon(self, x_click, y_click):
+		def dist(hex_and_type):
+			return (abs(hex_and_type[0][0]-x_click) 
+				+ abs(hex_and_type[0][1]-y_click))
+		return min(self.sq_coord_list_and_type,
+			 key=dist)
+		
 def translate_hex_position_to_pixels(hex_position, radius):
 	x_coord = hex_position[0]
 	z_coord = hex_position[2]
@@ -30,13 +41,27 @@ def translate_hex_position_to_pixels(hex_position, radius):
 	b_coord = math.sqrt(3)*radius*(z_coord/2.0 + x_coord)
 	return (a_coord, b_coord)
 
-def main(hex_positions_and_type, radius):
+def callback(event):
+	print event.x, event.y
+
+
+def main(hex_grid, hex_positions_and_type, radius):
 	window = Tk()
 	can = Canvas(window, width=500, height=500)
+	can.bind('<Button-1>', callback)
 	can.pack()
-	square_positions_and_type = [(translate_hex_position_to_pixels(pos[0],radius),pos[1]) for pos in hex_positions_and_type]
-	hex = HexGrid(square_positions_and_type,radius, can)
-
+	grid_positions = [(translate_hex_position_to_pixels(hex_position,radius),
+			  hex_grid[hex_position])
+			  for hex_position in hex_grid]
+	square_positions_and_type = [(translate_hex_position_to_pixels(hex_position,
+					radius),hex_positions_and_type[hex_position])
+					for hex_position 
+					in hex_positions_and_type]
+	print square_positions_and_type
+	h = HexGrid(grid_positions,radius, can)
+	for sq_coord in square_positions_and_type:
+		h.draw_polygon(sq_coord[0][0], sq_coord[0][1], sq_coord[1])
+		
 	window.mainloop()
 
 if __name__ == '__main__':

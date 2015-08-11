@@ -22,7 +22,7 @@ class TestHive(unittest.TestCase):
 	def test_space_has_a_piece_in_it(self):
 		b = Board(5,5,60)
 		p = Piece('_')
-		b.pos_dict[(1,-2,1)].append(p.piece_type)
+		b.pieces_dict[(1,-2,1)] = p
 		self.assertTrue(b.space_has_piece_in_it((1,-2,1)))
 		
 	def test_place_piece(self):
@@ -30,14 +30,29 @@ class TestHive(unittest.TestCase):
 		place = (2,-4,2)
 		piece = Piece('some')
 		b.place_piece(place,piece)
-		self.assertIn(piece, b.pos_dict[place])
+		self.assertTrue(b.pieces_dict[place] == piece)
 
 	def test_move_piece(self):
-		pass
+		b = Board(5,5,'_')
+		
+		start_place = (0,0,0)
+		end_place = (0,1,-1)
+		p = Piece('_')
+		b.place_piece(start_place, p)
+		b.move_piece(start_place, end_place)
+		self.assertTrue(b.pieces_dict[end_place] == p 
+				and start_place not in b.pieces_dict)
+		
 	def test_translate_wh_into_hex_coords(self):
 		e = Board(4,4,100)
 		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
 
+	def test_find_closest_hexagon(self):
+		e = Board(20,20,10)
+		pd = e.empty_grid
+		p = Piece('-')
+		e.place_piece((10,-20,10),p)
+		hcan.main(pd, e.pieces_dict, e.radius)
 	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
 		e = Board(100,100,10)
