@@ -59,13 +59,10 @@ class TestHive(unittest.TestCase):
 		pd = e.empty_grid
 		p = Piece('-')
 		e.place_piece((10,-20,10),p)
-		empty = [(hcan.translate_hex_position_to_pixels(hex_position,e.radius),
-			  pd[hex_position])
-			  for hex_position in pd]
-		
+		empty = hcan.generate_sq_coords_and_types(pd,e.radius)
+		pieces = hcan.generate_sq_coords_and_types(e.pieces_dict,e.radius)
 		can = create_canvas()	
-		h = hcan.HexGrid(empty, e.radius, can)
-		#h = hcan.main(pd, e.pieces_dict, e.radius)
+		h = hcan.HexGrid(empty,pieces,e.radius,can)
 		x_click = 156
 		y_click = 265	
 		self.assertTrue(h.find_closest_hexagon(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
@@ -78,9 +75,6 @@ class TestHive(unittest.TestCase):
 		e.place_piece((24,-48,24),p)
 		e.place_piece((14,-28,14),p)
 		placed = e.pieces_dict
-		#posses = [(coord, None) for coord in e.positions]
-		#posses.append(((1,-2,1),p.piece_type))
-		#posses.append(((25,-50,25),p.piece_type))
 		
 		hcan.main(pd,placed, e.radius)
 	
