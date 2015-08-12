@@ -3,6 +3,13 @@ import unittest
 import hive_canvas as hcan
 from board import Board
 from piece import Piece
+from Tkinter import Tk, Canvas
+
+def create_canvas():
+	window = Tk()
+	can = Canvas(window, width=500, height=500)
+	can.pack()
+	return can
 
 class TestHive(unittest.TestCase):
 	def test_adjacent_spots(self):
@@ -52,16 +59,30 @@ class TestHive(unittest.TestCase):
 		pd = e.empty_grid
 		p = Piece('-')
 		e.place_piece((10,-20,10),p)
-		hcan.main(pd, e.pieces_dict, e.radius)
+		empty = [(hcan.translate_hex_position_to_pixels(hex_position,e.radius),
+			  pd[hex_position])
+			  for hex_position in pd]
+		
+		can = create_canvas()	
+		h = hcan.HexGrid(empty, e.radius, can)
+		#h = hcan.main(pd, e.pieces_dict, e.radius)
+		x_click = 156
+		y_click = 265	
+		self.assertTrue(h.find_closest_hexagon(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
 	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
 		e = Board(100,100,10)
 		p = Piece('exists')
-		posses = [(coord, None) for coord in e.positions]
-		posses.append(((1,-2,1),p.piece_type))
-		posses.append(((25,-50,25),p.piece_type))
+		pd = e.empty_grid
+		p = Piece('-')
+		e.place_piece((24,-48,24),p)
+		e.place_piece((14,-28,14),p)
+		placed = e.pieces_dict
+		#posses = [(coord, None) for coord in e.positions]
+		#posses.append(((1,-2,1),p.piece_type))
+		#posses.append(((25,-50,25),p.piece_type))
 		
-		hcan.main(posses, e.radius)
+		hcan.main(pd,placed, e.radius)
 	
 if __name__ == '__main__':
 	unittest.main()

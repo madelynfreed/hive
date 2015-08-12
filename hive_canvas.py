@@ -41,8 +41,12 @@ def translate_hex_position_to_pixels(hex_position, radius):
 	b_coord = math.sqrt(3)*radius*(z_coord/2.0 + x_coord)
 	return (a_coord, b_coord)
 
+def generate_sq_coords_and_types(hex_dict, radius):
+	return [(translate_hex_position_to_pixels(hex_position, radius),
+				hex_dict[hex_position])
+				for hex_position in hex_dict]
 def callback(event):
-	print event.x, event.y
+	return event.x, event.y
 
 
 def main(hex_grid, hex_positions_and_type, radius):
@@ -50,14 +54,8 @@ def main(hex_grid, hex_positions_and_type, radius):
 	can = Canvas(window, width=500, height=500)
 	can.bind('<Button-1>', callback)
 	can.pack()
-	grid_positions = [(translate_hex_position_to_pixels(hex_position,radius),
-			  hex_grid[hex_position])
-			  for hex_position in hex_grid]
-	square_positions_and_type = [(translate_hex_position_to_pixels(hex_position,
-					radius),hex_positions_and_type[hex_position])
-					for hex_position 
-					in hex_positions_and_type]
-	print square_positions_and_type
+	grid_positions = generate_sq_coords_and_types(hex_grid, radius) 
+	square_positions_and_type = generate_sq_coords_and_types(hex_positions_and_type, radius) 
 	h = HexGrid(grid_positions,radius, can)
 	for sq_coord in square_positions_and_type:
 		h.draw_polygon(sq_coord[0][0], sq_coord[0][1], sq_coord[1])
