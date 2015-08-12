@@ -2,6 +2,7 @@
 from Tkinter import Tk, Canvas
 import math
 from board import Board
+from piece import Piece
 
 class HexGrid(object):
 	def __init__(self, board_object, radius, canvas):
@@ -14,8 +15,6 @@ class HexGrid(object):
 		self.coord_of_pieces = generate_sq_coords_and_types(self.pieces_dict, radius) 
 
 		self.canvas.bind('<Button-1>', self.callback)
-	#	self.coord_of_pieces = coord_of_pieces
-	#	self.blank_grid_coords = blank_grid_coords
 	def print_to_canvas(self,sq_coord_list_and_type):
 		for sq_coord in sq_coord_list_and_type:
 			self.draw_polygon(sq_coord[0][0], sq_coord[0][1], 
@@ -37,7 +36,6 @@ class HexGrid(object):
 			piece = self.canvas.create_polygon(point_reference, 
 						outline='gray',
 						activefill='pink',
-						#tags=piece_type.piece_type,
 						fill='red',width=1)
 
 	def find_closest_hexagon(self, x_click, y_click):
@@ -51,7 +49,11 @@ class HexGrid(object):
 		x = self.find_closest_hexagon(event.x, event.y)
 		a,b = x[0] 
 		self.draw_polygon(a,b,'exists')
+		hexes = translate_pixels_to_hex_position(x[0],self.radius)
+		p = Piece('exists')
+		self.board.place_piece(hexes,p)
 		print event.x, event.y
+		print self.pieces_dict
 def translate_hex_position_to_pixels(hex_position, radius):
 	x_coord = hex_position[0]
 	z_coord = hex_position[2]
@@ -71,7 +73,6 @@ def generate_sq_coords_and_types(hex_dict, radius):
 				hex_dict[hex_position])
 				for hex_position in hex_dict]
 	
-#when click, find nearest hexagon and place a piece there
 def main(board_object, radius):
 	window = Tk()
 
