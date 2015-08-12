@@ -54,6 +54,12 @@ class TestHive(unittest.TestCase):
 		e = Board(4,4,100)
 		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
 
+	def test_translate_hex_to_sq_and_back(self):
+		hex_pos = (4,-9,5)
+		sq = hcan.translate_hex_position_to_pixels(hex_pos, 10)
+		self.assertTrue(hcan.translate_pixels_to_hex_position(sq, 10) == hex_pos)
+	
+	#@unittest.skip('dont want to always print')
 	def test_find_closest_hexagon(self):
 		e = Board(20,20,10)
 		pd = e.empty_grid
@@ -62,7 +68,7 @@ class TestHive(unittest.TestCase):
 		empty = hcan.generate_sq_coords_and_types(pd,e.radius)
 		pieces = hcan.generate_sq_coords_and_types(e.pieces_dict,e.radius)
 		can = create_canvas()	
-		h = hcan.HexGrid(empty,pieces,e.radius,can)
+		h = hcan.HexGrid(e,e.radius,can)
 		x_click = 156
 		y_click = 265	
 		self.assertTrue(h.find_closest_hexagon(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
@@ -76,7 +82,7 @@ class TestHive(unittest.TestCase):
 		e.place_piece((14,-28,14),p)
 		placed = e.pieces_dict
 		
-		hcan.main(pd,placed, e.radius)
+		hcan.main(e, e.radius)
 	
 if __name__ == '__main__':
 	unittest.main()
