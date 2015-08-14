@@ -44,9 +44,20 @@ class Board(object):
 	def are_adjacent(self,hexposition1,hexposition2):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
 
+	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_type):
+		return self.are_adjacent(start_hex_coord, end_hex_coord) and not self.space_has_piece_in_it(end_hex_coord)		
+
 	def move_piece(self, hex_coord, end_hex_coord):
-		if (hex_coord in self.pieces_dict 
-		    and self.are_adjacent(hex_coord, end_hex_coord)):
+		if (self.are_adjacent(hex_coord, end_hex_coord) 
+			and self.space_has_piece_in_it(end_hex_coord) == False):
+
+			print "BOARDS verson of hex coord and end coord"
+			print hex_coord, end_hex_coord
+			print "BOARD's version @move"
+			print self.pieces_dict
+			print self.pieces_dict[hex_coord]
 			self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
 			self.pieces_dict.pop(hex_coord)
+		else:
+			print "YOUUUU can only move to empty, adjacent spots!"
 			

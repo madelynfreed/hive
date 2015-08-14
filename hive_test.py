@@ -59,6 +59,17 @@ class TestHive(unittest.TestCase):
 		sq = hcan.translate_hex_position_to_pixels(hex_pos, 10)
 		self.assertTrue(hcan.translate_pixels_to_hex_position(sq, 10) == hex_pos)
 	
+	def test_is_valid_move(self):
+		e = Board(4,4,100)
+		start_hex_coords = (1,-2,1)
+		end_hex_coords = (1,-1,0)
+		p = Piece('exists')
+		
+		e.place_piece(start_hex_coords,p)
+		self.assertTrue(e.is_valid_move(start_hex_coords,
+				end_hex_coords,
+				p.piece_type))
+
 	@unittest.skip('dont want to always print')
 	def test_find_closest_hexagon(self):
 		e = Board(20,20,10)
@@ -72,6 +83,7 @@ class TestHive(unittest.TestCase):
 		x_click = 156
 		y_click = 265	
 		self.assertTrue(h.find_closest_hexagon(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
+
 	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
 		e = Board(100,100,20)

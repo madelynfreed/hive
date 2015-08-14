@@ -25,25 +25,14 @@ class HexGrid(object):
 		self.blank_grid_coords = generate_sq_coords_and_types(self.empty_grid_dict, radius) 
 		
 		self._drag_data = {"x": 0, "y": 0, "item" : None}
+		self._start_move = {"x":0, "y":0}
 	def print_tagged_to_canvas(self,sq_coord_list_and_type):
 		for sq_coord in sq_coord_list_and_type:
 			self.draw_polygon(sq_coord[0][0], sq_coord[0][1], 
 			sq_coord[1])
 
-	def hex_points_reference(self,a_coo,b_coo):
-		return  [a_coo+0.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius),
-			 a_coo+self.radius, b_coo,
-			 a_coo+.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
-			 a_coo-.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
-			 a_coo-self.radius, b_coo,
-			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
 	def draw_polygon(self,a_coo,b_coo,piece_type):
-		point_reference = [a_coo+0.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius),
-			 a_coo+self.radius, b_coo,
-			 a_coo+.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
-			 a_coo-.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
-			 a_coo-self.radius, b_coo,
-			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
+		point_reference = self.hex_points_reference(a_coo,b_coo)
 		if piece_type == None:
 			blank_hexagon = self.canvas.create_polygon(point_reference, 
 						outline='gray',
@@ -71,15 +60,53 @@ class HexGrid(object):
 	def OnTagButtonPress(self, event):
 		self._drag_data["item"] = self.find_closest_piece(event.x, event.y)
 		self._drag_data['x'] = event.x
+		self._start_move['x'] = event.x
+
 		self._drag_data['y'] = event.y
+		self._start_move['y'] = event.y
 	
+	def move_piece_on_canvas(self, sq_coords):
+		end_hexes = translate_pixels_to_hex_position(sq_coords,self.radius)
+		
+		start_hexes = translate_pixels_to_hex_position((self._start_move['x'],
+				self._start_move['y']),self.radius)
+		print "CANVAS version of hexposition!"
+		print start_hexes
+		print end_hexes
+		self.board.move_piece(start_hexes,end_hexes)
+		print "CANVAS version of @move"
+		print self.pieces_dict
+	def is_valid_move_canvas(self, sq_start_move, sq_end_move, piece_type):
+		hex_start_move = translate_pixels_to_hex_position(sq_start_move, self.radius)
+		hex_end_move = translate_pixels_to_hex_position(sq_end_move, self.radius)
+		return self.board.is_valid_move(hex_start_move, hex_end_move, piece_type)
+
 	def OnTagButtonRelease(self, event):
 		x = self.find_closest_space(event.x, event.y)
-		points = self.hex_points_reference(x[0][0],x[0][1])
-		print points
-		self.canvas.coords(self._drag_data["item"],points[0],points[1],points[2],points[3],points[4],points[5],points[6],points[7],points[8],points[9],points[10],points[11],)
-		self._drag_data["item"] = None
 		
+		if self.is_valid_move_canvas((self._start_move['x'], self._start_move['y']), x[0],'exists'):
+			self.move_piece_on_canvas(x[0])
+			points = self.hex_points_reference(x[0][0],x[0][1])
+			self.canvas.coords(self._drag_data["item"],
+						points[0],points[1],
+						points[2],points[3],
+						points[4],points[5],
+						points[6],points[7],
+						points[8],points[9],
+						points[10],points[11])
+		else:
+			print "can't do that baby"
+			points = self.hex_points_reference(self._start_move['x'], self._start_move['y'])
+			self.canvas.coords(self._drag_data["item"],
+						points[0],points[1],
+						points[2],points[3],
+						points[4],points[5],
+						points[6],points[7],
+						points[8],points[9],
+						points[10],points[11])
+			print "i've done it now"
+
+		self._drag_data["item"] = None
 		self._drag_data['x'] = 0
 		self._drag_data['y'] = 0
 
@@ -104,13 +131,14 @@ class HexGrid(object):
 		print event.x, event.y
 		print self.pieces_dict
 
-	def move_piece_on_canvas(self, event):
-		x = self.find_closest_space(event.x, event.y)
-		hexes = translate_pixels_to_hex_position(x[0],self.radius)
-		self.board.move_piece(hexes,(3,-6,3))
-		print event.x, event.y
-		print self.pieces_dict
 
+	def hex_points_reference(self,a_coo,b_coo):
+		return  [a_coo+0.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius),
+			 a_coo+self.radius, b_coo,
+			 a_coo+.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
+			 a_coo-.5*self.radius, b_coo+(math.sqrt(3)*0.5*self.radius),
+			 a_coo-self.radius, b_coo,
+			 a_coo-.5*self.radius, b_coo-(math.sqrt(3)*0.5*self.radius)]
 def translate_hex_position_to_pixels(hex_position, radius):
 	x_coord = hex_position[0]
 	z_coord = hex_position[2]
@@ -120,9 +148,9 @@ def translate_hex_position_to_pixels(hex_position, radius):
 def translate_pixels_to_hex_position(sq_coord, radius):
 	a_coord = sq_coord[0]
 	b_coord = sq_coord[1]
-	z_coord = a_coord/((3.0/2.0)*radius)
-	x_coord = (b_coord/(math.sqrt(3)*radius)) - z_coord/2.0
-	y_coord = -x_coord-z_coord
+	z_coord = int(round(a_coord/((3.0/2.0)*radius)))
+	x_coord = int(round((b_coord/(math.sqrt(3)*radius)) - z_coord/2.0))
+	y_coord = int(round(-x_coord-z_coord))
 	return (x_coord,y_coord,z_coord)
 	
 def generate_sq_coords_and_types(hex_dict, radius):
