@@ -10,11 +10,6 @@ class Board(object):
 		self.empty_grid = {hex_coord:None for hex_coord in self.positions}
 		self.pieces_dict = {}
 
-	#def existing_pieces(self):
-		#return [(hex_position, pieces) 
-			#for hex_position, pieces in self.pieces_dict.items() 
-			#if pieces]
-	
 	def translate_wh_into_hex_coords(self):
 		return [(x,-x-z,z)
 			for x in range(self.width) 
@@ -25,7 +20,7 @@ class Board(object):
 	
 	def place_piece(self,hex_position, piece_object):
 		if hex_position in self.pieces_dict:
-			self.pieces_dict[hex_position].append(piece_object) 
+			print "you can't place a piece there!"
 		else:
 			self.pieces_dict[hex_position] = piece_object
 		
@@ -45,19 +40,25 @@ class Board(object):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
 
 	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_type):
-		return self.are_adjacent(start_hex_coord, end_hex_coord) and not self.space_has_piece_in_it(end_hex_coord)		
+		return (self.are_adjacent(start_hex_coord,
+					 end_hex_coord) 
+		        and not 
+			self.space_has_piece_in_it(end_hex_coord)
+			and
+			self.is_adjacent_to_the_hive(end_hex_coord))		
 
 	def move_piece(self, hex_coord, end_hex_coord):
-		if (self.are_adjacent(hex_coord, end_hex_coord) 
-			and self.space_has_piece_in_it(end_hex_coord) == False):
-
-			print "BOARDS verson of hex coord and end coord"
-			print hex_coord, end_hex_coord
-			print "BOARD's version @move"
-			print self.pieces_dict
-			print self.pieces_dict[hex_coord]
-			self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
-			self.pieces_dict.pop(hex_coord)
-		else:
-			print "YOUUUU can only move to empty, adjacent spots!"
+		self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
+		self.pieces_dict.pop(hex_coord)
 			
+	def is_adjacent_to_the_hive(self, hex_coord):
+		print "HEX COORD   ", hex_coord
+		l = [self.adjacent_spots(hex_coo) for hex_coo in self.pieces_dict.keys()]
+		flat_list = reduce(lambda x,y: x+y, l)
+		return  hex_coord in flat_list 
+
+
+
+
+
+

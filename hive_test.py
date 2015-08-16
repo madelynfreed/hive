@@ -11,6 +11,17 @@ def create_canvas():
 	can.pack()
 	return can
 
+nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
+	     (4,-8,4),(3,-9,6),(3,-9,6),
+	     (3,-8,5),(2,-5,3)]
+
+def create_nice_board_and_hive():
+	e = Board(20,20,10)
+	p = Piece('exists')
+	for position in nice_hive:
+		e.place_piece(position, p)
+	return e
+
 class TestHive(unittest.TestCase):
 	def test_adjacent_spots(self):
 		b = Board(3,3,0)
@@ -70,7 +81,23 @@ class TestHive(unittest.TestCase):
 				end_hex_coords,
 				p.piece_type))
 
-	@unittest.skip('dont want to always print')
+	def test_is_valid_move_because_of_hive_adjacency(self):
+		e = create_nice_board_and_hive()
+
+		pass
+		
+	def test_is_adjacent_to_the_hive(self):
+		e = create_nice_board_and_hive()
+		spot = (2,-8,6)
+		self.assertTrue(e.is_adjacent_to_the_hive(spot))
+
+	def test_is_not_adjacent_to_the_hive(self):
+		e = create_nice_board_and_hive()
+		spot = (6,-20,14)
+		self.assertFalse(e.is_adjacent_to_the_hive(spot))
+			
+		
+	#@unittest.skip('dont want to always print')
 	def test_find_closest_hexagon(self):
 		e = Board(20,20,10)
 		pd = e.empty_grid
@@ -82,7 +109,7 @@ class TestHive(unittest.TestCase):
 		h = hcan.HexGrid(e,e.radius,can)
 		x_click = 156
 		y_click = 265	
-		self.assertTrue(h.find_closest_hexagon(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
+		self.assertTrue(h.find_closest_space(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
 
 	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):

@@ -60,11 +60,7 @@ class HexGrid(object):
 	def OnTagButtonPress(self, event):
 		self._drag_data["item"] = self.find_closest_piece(event.x, event.y)
 		self._drag_data['x'] = event.x
-		print "DRAG DATAon BUTTON PRESS"
-		print self._drag_data['x']
 		self._start_move['x'] = self.find_closest_space(event.x,event.y)[0][0]
-		print "START MOVE on BUTTON PRESS"
-		print self._start_move['x']
 		self._drag_data['y'] = event.y
 		self._start_move['y'] = self.find_closest_space(event.x,event.y)[0][1]
 	
@@ -95,7 +91,6 @@ class HexGrid(object):
 						points[10],points[11])
 		else:
 			print "can't do that baby"
-			print self._start_move['x'], self._start_move['y']
 			points = self.hex_points_reference(self._start_move['x'], self._start_move['y'])
 			self.canvas.coords(self._drag_data["item"],
 						points[0],points[1],
@@ -104,7 +99,6 @@ class HexGrid(object):
 						points[6],points[7],
 						points[8],points[9],
 						points[10],points[11])
-			print "i've done it now"
 
 		self._drag_data["item"] = None
 		self._drag_data['x'] = 0
@@ -130,7 +124,6 @@ class HexGrid(object):
 		hexes = translate_pixels_to_hex_position(x[0],self.radius)
 		p = Piece('exists')
 		self.board.place_piece(hexes,p)
-		print event.x, event.y
 		print self.pieces_dict
 
 
