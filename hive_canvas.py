@@ -21,16 +21,24 @@ class HexGrid(object):
 		self.canvas.tag_bind('exists','<ButtonPress-1>', self.OnTagButtonPress)
 		self.canvas.tag_bind('exists','<ButtonRelease-1>', self.OnTagButtonRelease)
 		self.canvas.tag_bind('exists','<B1-Motion>', self.OnTagMotion)
-		self.canvas.bind('Double-Button-1', self.move_piece_on_canvas)
 		self.blank_grid_coords = generate_sq_coords_and_types(self.empty_grid_dict, radius) 
 		
 		self._drag_data = {"x": 0, "y": 0, "item" : None}
 		self._start_move = {"x":0, "y":0}
+		self._offset = {"x_delta":0, "y_delta":0}
 	def print_tagged_to_canvas(self,sq_coord_list_and_type):
 		for sq_coord in sq_coord_list_and_type:
 			self.draw_polygon(sq_coord[0][0], sq_coord[0][1], 
 			sq_coord[1])
 
+	def print_coords_to_canvas(self):
+		for positions in self.blank_grid_coords:
+			self.canvas.create_text(positions[0][0], positions[0][1],
+					   anchor = 'n', 
+					   state = 'disabled',
+					   font = ('arial',8),
+					   text = translate_pixels_to_hex_position(
+					   positions[0],self.radius))
 	def draw_polygon(self,a_coo,b_coo,piece_type):
 		point_reference = self.hex_points_reference(a_coo,b_coo)
 		if piece_type == None:
@@ -57,12 +65,6 @@ class HexGrid(object):
 		close_pieces = self.canvas.find_closest(x_click,y_click, halo=self.radius)
 		return close_pieces[0]
 		
-	def OnTagButtonPress(self, event):
-		self._drag_data["item"] = self.find_closest_piece(event.x, event.y)
-		self._drag_data['x'] = event.x
-		self._start_move['x'] = self.find_closest_space(event.x,event.y)[0][0]
-		self._drag_data['y'] = event.y
-		self._start_move['y'] = self.find_closest_space(event.x,event.y)[0][1]
 	
 	def move_piece_on_canvas(self, sq_coords):
 		end_hexes = translate_pixels_to_hex_position(sq_coords,self.radius)
@@ -76,8 +78,17 @@ class HexGrid(object):
 		hex_end_move = translate_pixels_to_hex_position(sq_end_move, self.radius)
 		return self.board.is_valid_move(hex_start_move, hex_end_move, piece_type)
 
+	def OnTagButtonPress(self, event):
+		self._drag_data["item"] = self.find_closest_piece(event.x, event.y)
+		self._drag_data['x'] = event.x
+		self._start_move['x'] = self.find_closest_space(event.x,event.y)[0][0]
+		self._drag_data['y'] = event.y
+		self._start_move['y'] = self.find_closest_space(event.x,event.y)[0][1]
+
+		self._offset['x_delta'] = self._start_move['x'] - self._drag_data['x']
+		self._offset['y_delta'] = self._start_move['y'] - self._drag_data['y']
 	def OnTagButtonRelease(self, event):
-		x = self.find_closest_space(event.x, event.y)
+		x = self.find_closest_space(self._drag_data['x']-self._offset['x_delta'], self._drag_data['y']-self._offset['y_delta'])
 		
 		if self.is_valid_move_canvas((self._start_move['x'], self._start_move['y']), x[0],'exists'):
 			self.move_piece_on_canvas(x[0])
@@ -162,7 +173,7 @@ def main(board_object, radius):
 	h = HexGrid(board_object,radius, can)
 	h.print_tagged_to_canvas(h.blank_grid_coords)
 	h.print_tagged_to_canvas(h.coord_of_pieces)
-
+	h.print_coords_to_canvas()
 	window.mainloop()
 
 if __name__ == '__main__':

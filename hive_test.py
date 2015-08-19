@@ -113,12 +113,10 @@ class TestHive(unittest.TestCase):
 
 	#@unittest.skip('dont want to always print')
 	def test_printing_board(self):
-		e = Board(100,100,20)
+		e = Board(100,100,50)
 		p = Piece('exists')
 		pd = e.empty_grid
 		p = Piece('-')
-		e.place_piece((24,-48,24),p)
-		e.place_piece((14,-28,14),p)
 		placed = e.pieces_dict
 		
 		hcan.main(e, e.radius)
