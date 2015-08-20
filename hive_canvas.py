@@ -3,8 +3,11 @@ from Tkinter import Tk, Canvas
 import math
 from board import Board
 from piece import Piece
+import logging
+
 
 class HexGrid(object):
+	
 	def __init__(self, board_object, radius, canvas):
 
 		self.canvas = canvas
@@ -26,8 +29,14 @@ class HexGrid(object):
 		self._drag_data = {"x": 0, "y": 0, "item" : None}
 		self._start_move = {"x":0, "y":0}
 		self._offset = {"x_delta":0, "y_delta":0}
+		
+		logging.basicConfig(level=logging.DEBUG, format='%(funcName)s, %(message)s')
+		self.logger = logging.getLogger(__name__)
+		
+		
 	def print_tagged_to_canvas(self,sq_coord_list_and_type):
 		for sq_coord in sq_coord_list_and_type:
+	
 			self.draw_polygon(sq_coord[0][0], sq_coord[0][1], 
 			sq_coord[1])
 
@@ -135,6 +144,8 @@ class HexGrid(object):
 		hexes = translate_pixels_to_hex_position(x[0],self.radius)
 		p = Piece('exists')
 		self.board.place_piece(hexes,p)
+		self.logger.debug(
+			'pring tagged to canvas.  SQ COORD: %r %r' % (a,b))
 		print self.pieces_dict
 
 

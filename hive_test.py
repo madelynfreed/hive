@@ -97,7 +97,7 @@ class TestHive(unittest.TestCase):
 		self.assertFalse(e.is_adjacent_to_the_hive(spot))
 			
 		
-	#@unittest.skip('dont want to always print')
+	@unittest.skip('dont want to always print')
 	def test_find_closest_hexagon(self):
 		e = Board(20,20,10)
 		pd = e.empty_grid
