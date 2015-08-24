@@ -42,4 +42,5 @@ for key in e.empty_grid:
 	(a,b) = translate_hex_position_to_pixels(key, radius)
 	img_string += hex_at_square_coords(a,b)
 
-print header + img_string + footer
+def build_string():
+	return header + img_string + footer

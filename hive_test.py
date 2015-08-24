@@ -1,15 +1,19 @@
 #TEST
 import unittest
-import hive_canvas as hcan
+#import hive_canvas as hcan
 from board import Board
 from piece import Piece
-from Tkinter import Tk, Canvas
+#from Tkinter import Tk, Canvas
+import webbrowser
+import tempfile
+import time
+import webhive
 
-def create_canvas():
-	window = Tk()
-	can = Canvas(window, width=500, height=500)
-	can.pack()
-	return can
+#def create_canvas():
+#	window = Tk()
+#	can = Canvas(window, width=500, height=500)
+#	can.pack()
+#	return can
 
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-9,6),
@@ -65,10 +69,10 @@ class TestHive(unittest.TestCase):
 		e = Board(4,4,100)
 		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
 
-	def test_translate_hex_to_sq_and_back(self):
-		hex_pos = (4,-9,5)
-		sq = hcan.translate_hex_position_to_pixels(hex_pos, 10)
-		self.assertTrue(hcan.translate_pixels_to_hex_position(sq, 10) == hex_pos)
+	#def test_translate_hex_to_sq_and_back(self):
+		#hex_pos = (4,-9,5)
+		#sq = hcan.translate_hex_position_to_pixels(hex_pos, 10)
+		#self.assertTrue(hcan.translate_pixels_to_hex_position(sq, 10) == hex_pos)
 	
 	def test_is_valid_move(self):
 		e = Board(4,4,100)
@@ -95,31 +99,30 @@ class TestHive(unittest.TestCase):
 		e = create_nice_board_and_hive()
 		spot = (6,-20,14)
 		self.assertFalse(e.is_adjacent_to_the_hive(spot))
-			
-		
-	@unittest.skip('dont want to always print')
-	def test_find_closest_hexagon(self):
-		e = Board(20,20,10)
-		pd = e.empty_grid
-		p = Piece('-')
-		e.place_piece((10,-20,10),p)
-		empty = hcan.generate_sq_coords_and_types(pd,e.radius)
-		pieces = hcan.generate_sq_coords_and_types(e.pieces_dict,e.radius)
-		can = create_canvas()	
-		h = hcan.HexGrid(e,e.radius,can)
-		x_click = 156
-		y_click = 265	
-		self.assertTrue(h.find_closest_space(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
+	
+	#@unittest.skip('dont want to always print')
+	#def test_find_closest_hexagon(self):
+		#e = Board(20,20,10)
+		#pd = e.empty_grid
+		#p = Piece('-')
+		#e.place_piece((10,-20,10),p)
+		#empty = hcan.generate_sq_coords_and_types(pd,e.radius)
+		#pieces = hcan.generate_sq_coords_and_types(e.pieces_dict,e.radius)
+		#can = create_canvas()	
+		#h = hcan.HexGrid(e,e.radius,can)
+		#x_click = 156
+		#y_click = 265	
+		#self.assertTrue(h.find_closest_space(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
 
 	#@unittest.skip('dont want to always print')
-	def test_printing_board(self):
-		e = Board(100,100,50)
-		p = Piece('exists')
-		pd = e.empty_grid
-		p = Piece('-')
-		placed = e.pieces_dict
-		
-		hcan.main(e, e.radius)
+	#def test_printing_board(self):
+		#e = Board(100,100,50)
+		#p = Piece('exists')
+		#pd = e.empty_grid
+		#p = Piece('-')
+		#placed = e.pieces_dict
+		#
+		#hcan.main(e, e.radius)
 	
 if __name__ == '__main__':
 	unittest.main()
