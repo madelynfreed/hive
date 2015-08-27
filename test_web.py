@@ -13,7 +13,7 @@ class TestHive(unittest.TestCase):
 			f.flush()
 			print f.name
 			webbrowser.open_new_tab('file://'+f.name)
-			time.sleep(1)	
+			time.sleep(100)	
 
 if __name__ == '__main__':
 	unittest.main()

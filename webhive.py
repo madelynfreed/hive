@@ -5,12 +5,19 @@ import hive_test
 from location_and_piece import LocationPiece as lp
 
 def hex_at_square_coords(location_piece):
-	if location_piece.piece_object != None: 
-		return '<img src="http://www.iconsdb.com/icons/preview/red/hexagon-xxl.png" style="left:%dpx; top:%dpx" width="400">' % (location_piece.a, location_piece.b)
-	else:
-		return '<img src="http://www.fontsaddict.com/images/icons/png/22865.png" style="left:%dpx; top:%dpx" width="400">' % (location_piece.a, location_piece.b)
+	piece_image = "/piece_image.png" 
+	blank_image = "/blank_image.png"
+	return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="400"></a>' % (
+		location_piece.x,
+		location_piece.y,
+		location_piece.z,
+		piece_image if location_piece.piece_object != None else blank_image,
+		location_piece.id_from_hex,
+		location_piece.a, 
+		location_piece.b)
 
-radius = 153
+radius = 200
+#radius = 153
 #this specific radius is special for the image source
 
 e = hive_test.create_nice_board_and_hive()
