@@ -18,11 +18,11 @@ class Board(object):
 	def space_has_piece_in_it(self, hex_coord):
 		return hex_coord in self.pieces_dict
 	
-	def place_piece(self,hex_position, piece_object):
-		if hex_position in self.pieces_dict:
+	def place_piece(self,locpiece):
+		if locpiece.hex_coordinates in self.pieces_dict:
 			print "you can't place a piece there!"
 		else:
-			self.pieces_dict[hex_position] = piece_object
+			self.pieces_dict[locpiece.hex_coordinates] = locpiece.piece_object
 		
 	def adjacent_spots(self, hex_position):
 		x_coord = hex_position[0]

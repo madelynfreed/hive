@@ -4,6 +4,7 @@ import unittest
 from board import Board
 from piece import Piece
 #from Tkinter import Tk, Canvas
+from location_and_piece import LocationPiece as lp
 import webbrowser
 import tempfile
 import time
@@ -23,7 +24,7 @@ def create_nice_board_and_hive():
 	e = Board(20,20,10)
 	p = Piece('exists')
 	for position in nice_hive:
-		e.place_piece(position, p)
+		e.place_piece(lp(p, position,10))
 	return e
 
 class TestHive(unittest.TestCase):
@@ -51,7 +52,7 @@ class TestHive(unittest.TestCase):
 		b = Board(5,5,60)
 		place = (2,-4,2)
 		piece = Piece('some')
-		b.place_piece(place,piece)
+		b.place_piece(lp(piece,place,60))
 		self.assertTrue(b.pieces_dict[place] == piece)
 
 	def test_move_piece(self):
@@ -60,7 +61,7 @@ class TestHive(unittest.TestCase):
 		start_place = (0,0,0)
 		end_place = (0,1,-1)
 		p = Piece('_')
-		b.place_piece(start_place, p)
+		b.place_piece(lp(p, start_place,0))
 		b.move_piece(start_place, end_place)
 		self.assertTrue(b.pieces_dict[end_place] == p 
 				and start_place not in b.pieces_dict)
@@ -80,7 +81,7 @@ class TestHive(unittest.TestCase):
 		end_hex_coords = (1,-1,0)
 		p = Piece('exists')
 		
-		e.place_piece(start_hex_coords,p)
+		e.place_piece(lp(p,start_hex_coords,100))
 		self.assertTrue(e.is_valid_move(start_hex_coords,
 				end_hex_coords,
 				p.piece_type))

@@ -1,16 +1,19 @@
-from flask import Flask, Response
+from flask import Flask
 import webhive
+from board import Board as bo
 app = Flask(__name__)
 
+wh = webhive.WebHive()
+
 @app.route("/")
-def hello():
-    return webhive.build_string()
+def start():
+    return wh.build_string()
 
 @app.route("/click/<x>/<y>/<z>")
-def asdf(x, y, z):
-    return 'you clicked on' + str(x) + str(y) + str(z)
-    #make the move in the python code 
-    #return webhive.build_string() after it's done
+def place_piece(x, y, z):
+
+    wh.place_piece(x,y,z)
+    return wh.build_string()
 
 
 @app.route("/piece_image.png")
