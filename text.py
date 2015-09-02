@@ -20,9 +20,6 @@ def header():
 def footer():
 	return """
 	</div>
-	<script>
-	alert("hello")
-	</script>
 	</body>
 	</html>
 	"""

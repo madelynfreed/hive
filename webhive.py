@@ -35,8 +35,11 @@ class WebHive(object):
 			for hex_coords, piece in self.e.pieces_dict.items()]
 
 	def move_piece(self, x1, y1, z1, x2, y2, z2):
-		pass
-		
+		self.e.move_piece((x1, y1, z1),(x2, y2, z2))
+		self.location_pieces = [
+			lp(piece, hex_coords, self.radius) 
+			for hex_coords, piece in self.e.pieces_dict.items()]
+			
 	@staticmethod
 	def hex_at_square_coords(location_piece):
 		piece_image = "/piece_image.png" 
