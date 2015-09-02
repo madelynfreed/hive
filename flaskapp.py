@@ -1,6 +1,5 @@
 from flask import Flask
 import webhive
-from board import Board as bo
 app = Flask(__name__)
 
 wh = webhive.WebHive()
@@ -17,6 +16,10 @@ def place_piece(x, y, z):
     wh.place_piece(x,y,z)
     return wh.build_string()
 
+@app.route("/move/<x1>/<y1>/<z1>/to/<x2>/<y2>/<z2>")
+def move_piece(x1, y1, z1, x2, y2, z2):
+    wh.move_piece(x1, y1, z1, x2, y2, z2)
+    return wh.build_string()
 
 @app.route("/piece_image.png")
 def piece_image():

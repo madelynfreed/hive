@@ -10,10 +10,10 @@ class WebHive(object):
 		self.e = hive_test.create_nice_board_and_hive()
 		self.radius = 200
 
-		self.location_pieces_dict = [
+		self.location_pieces = [
 			lp(piece, hex_coords, self.radius) 
 			for hex_coords, piece in self.e.pieces_dict.items()]
-		self.location_pieces_empty_grid_dict = [
+		self.location_pieces_empty_grid = [
 			lp(piece, hex_coords, self.radius) 
 			for hex_coords, piece in self.e.empty_grid.items()]
 
@@ -25,15 +25,18 @@ class WebHive(object):
 		return img_string
 
 	def build_string(self):
-		return text.header() + self.template_to_draw_hexes(self.location_pieces_empty_grid_dict) + self.template_to_draw_hexes(self.location_pieces_dict) + text.footer()
+		return text.header() + self.template_to_draw_hexes(self.location_pieces_empty_grid) + self.template_to_draw_hexes(self.location_pieces) + text.footer()
 
 	def place_piece(self,x,y,z):
 		locpie = lp(Piece('exists'), (x,y,z), self.radius)
 		self.e.place_piece(locpie)
-		self.location_pieces_dict = [
+		self.location_pieces = [
 			lp(piece, hex_coords, self.radius) 
 			for hex_coords, piece in self.e.pieces_dict.items()]
 
+	def move_piece(self, x1, y1, z1, x2, y2, z2):
+		pass
+		
 	@staticmethod
 	def hex_at_square_coords(location_piece):
 		piece_image = "/piece_image.png" 
