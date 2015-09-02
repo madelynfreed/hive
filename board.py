@@ -52,7 +52,6 @@ class Board(object):
 		self.pieces_dict.pop(hex_coord)
 			
 	def is_adjacent_to_the_hive(self, hex_coord):
-		print "HEX COORD   ", hex_coord
 		l = [self.adjacent_spots(hex_coo) for hex_coo in self.pieces_dict.keys()]
 		flat_list = reduce(lambda x,y: x+y, l)
 		return  hex_coord in flat_list 

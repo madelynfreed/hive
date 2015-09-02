@@ -28,7 +28,8 @@ class WebHive(object):
 		return text.header() + self.template_to_draw_hexes(self.location_pieces_empty_grid_dict) + self.template_to_draw_hexes(self.location_pieces_dict) + text.footer()
 
 	def place_piece(self,x,y,z):
-		self.e.place_piece(lp(Piece('exists'), (x,y,z), self.radius))
+		locpie = lp(Piece('exists'), (x,y,z), self.radius)
+		self.e.place_piece(locpie)
 		self.location_pieces_dict = [
 			lp(piece, hex_coords, self.radius) 
 			for hex_coords, piece in self.e.pieces_dict.items()]
@@ -37,6 +38,9 @@ class WebHive(object):
 	def hex_at_square_coords(location_piece):
 		piece_image = "/piece_image.png" 
 		blank_image = "/blank_image.png"
+		#x = map(lambda coord: (coord, type(coord)), [location_piece.x, location_piece.y, location_piece.z, location_piece.a, location_piece.b])
+		
+		#print x
 		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="400"></a>' % (
 			location_piece.x,
 			location_piece.y,
@@ -48,6 +52,5 @@ class WebHive(object):
 
 	#radius = 153
 	#this specific radius is special for the image source
-
 
 

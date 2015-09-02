@@ -7,11 +7,13 @@ wh = webhive.WebHive()
 
 @app.route("/")
 def start():
+    #d = filter(lambda coord: type(coord) == 'unicode', [x,y,z])
+    #print "THIS IS IT"
+    #print d
     return wh.build_string()
 
 @app.route("/click/<x>/<y>/<z>")
 def place_piece(x, y, z):
-
     wh.place_piece(x,y,z)
     return wh.build_string()
 
