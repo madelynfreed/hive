@@ -1,6 +1,8 @@
 #BOARD
 import math
 from piece import Piece
+from location_and_piece import LocationPiece as lp
+
 class Board(object):
 	def __init__(self, width, height, radius):
 		self.width = width
@@ -10,10 +12,23 @@ class Board(object):
 		self.empty_grid = {hex_coord:None for hex_coord in self.positions}
 		self.pieces_dict = {}
 
+		self.location_pieces = [
+			lp(piece, hex_coords, self.radius) 
+			for hex_coords, piece in self.pieces_dict.items()]
+		self.location_pieces_empty_grid = [
+			lp(piece, hex_coords, self.radius) 
+			for hex_coords, piece in self.empty_grid.items()]
+
 	def translate_wh_into_hex_coords(self):
 		return [(x,-x-z,z)
 			for x in range(self.width) 
 			for z in range(self.height)]
+	def refresh_lp(self):
+		self.location_pieces = [
+			lp(piece, hex_coords, self.radius) 
+			for hex_coords, piece in self.pieces_dict.items()]
+	def location_in_lp(self, spot):
+		return any(lp.hex_coordinates == spot for lp in self.location_pieces)
 		 
 	def space_has_piece_in_it(self, hex_coord):
 		return hex_coord in self.pieces_dict
@@ -23,6 +38,7 @@ class Board(object):
 			print "you can't place a piece there!"
 		else:
 			self.pieces_dict[locpiece.hex_coordinates] = locpiece.piece_object
+			self.refresh_lp()
 		
 	def adjacent_spots(self, hex_position):
 		x_coord = hex_position[0]
@@ -50,6 +66,7 @@ class Board(object):
 	def move_piece(self, hex_coord, end_hex_coord):
 		self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
 		self.pieces_dict.pop(hex_coord)
+		self.refresh_lp()
 			
 	def is_adjacent_to_the_hive(self, hex_coord):
 		l = [self.adjacent_spots(hex_coo) for hex_coo in self.pieces_dict.keys()]

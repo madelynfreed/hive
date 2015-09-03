@@ -17,7 +17,7 @@ import webhive
 #	return can
 
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
-	     (4,-8,4),(3,-9,6),(3,-9,6),
+	     (4,-8,4),(3,-9,6),(3,-10,7),
 	     (3,-8,5),(2,-5,3)]
 
 def create_nice_board_and_hive():
@@ -56,7 +56,7 @@ class TestHive(unittest.TestCase):
 		self.assertTrue(b.pieces_dict[place] == piece)
 
 	def test_move_piece(self):
-		b = Board(5,5,'_')
+		b = Board(5,5,'0')
 		
 		start_place = (0,0,0)
 		end_place = (0,1,-1)
@@ -86,10 +86,10 @@ class TestHive(unittest.TestCase):
 				end_hex_coords,
 				p.piece_type))
 
-	def test_is_valid_move_because_of_hive_adjacency(self):
-		e = create_nice_board_and_hive()
+	#def test_is_valid_move_because_of_hive_adjacency(self):
+		#e = create_nice_board_and_hive()
 
-		pass
+		#pass
 		
 	def test_is_adjacent_to_the_hive(self):
 		e = create_nice_board_and_hive()
@@ -101,6 +101,27 @@ class TestHive(unittest.TestCase):
 		spot = (6,-20,14)
 		self.assertFalse(e.is_adjacent_to_the_hive(spot))
 	
+	def test_location_in_lp(self):
+		e = create_nice_board_and_hive()
+		spot = (3,-10,7)
+		self.assertTrue(e.location_in_lp(spot))
+
+	def test_location_not_in_lp(self):
+		e = create_nice_board_and_hive()
+		spot = (100,100,100)
+		self.assertFalse(e.location_in_lp(spot))
+
+	def test_refresh_lp(self):
+		e = Board(10,10,100)
+		spot = (3,-3,0)
+		self.assertFalse(e.location_in_lp(spot))
+		p = Piece('exists')
+		locpie = lp(p,spot,100)
+		e.pieces_dict[locpie.hex_coordinates] = locpie.piece_object
+		e.refresh_lp()
+		self.assertTrue(e.location_in_lp(spot))
+		
+		
 	#@unittest.skip('dont want to always print')
 	#def test_find_closest_hexagon(self):
 		#e = Board(20,20,10)
