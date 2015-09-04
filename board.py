@@ -73,8 +73,3 @@ class Board(object):
 		flat_list = reduce(lambda x,y: x+y, l)
 		return  hex_coord in flat_list 
 
-
-
-
-
-
