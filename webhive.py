@@ -7,8 +7,8 @@ from location_and_piece import LocationPiece as lp
 
 class WebHive(object):
 	def __init__(self):
-		self.e = hive_test.create_nice_board_and_hive()
-		self.radius = 200
+		self.radius = 20
+		self.e = hive_test.create_nice_board_and_hive(self.radius)
 
 		#self.location_pieces = [
 		#	lp(piece, hex_coords, self.radius) 
@@ -47,7 +47,7 @@ class WebHive(object):
 		#x = map(lambda coord: (coord, type(coord)), [location_piece.x, location_piece.y, location_piece.z, location_piece.a, location_piece.b])
 		
 		#print x
-		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="400"></a>' % (
+		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="40"></a>' % (
 			location_piece.x,
 			location_piece.y,
 			location_piece.z,

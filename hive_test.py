@@ -20,11 +20,11 @@ nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-10,7),
 	     (3,-8,5),(2,-5,3)]
 
-def create_nice_board_and_hive():
-	e = Board(20,20,10)
+def create_nice_board_and_hive(radius):
+	e = Board(20,20,radius)
 	p = Piece('exists')
 	for position in nice_hive:
-		e.place_piece(lp(p, position,10))
+		e.place_piece(lp(p, position,radius))
 	return e
 
 class TestHive(unittest.TestCase):
@@ -92,22 +92,22 @@ class TestHive(unittest.TestCase):
 		#pass
 		
 	def test_is_adjacent_to_the_hive(self):
-		e = create_nice_board_and_hive()
+		e = create_nice_board_and_hive(10)
 		spot = (2,-8,6)
 		self.assertTrue(e.is_adjacent_to_the_hive(spot))
 
 	def test_is_not_adjacent_to_the_hive(self):
-		e = create_nice_board_and_hive()
+		e = create_nice_board_and_hive(10)
 		spot = (6,-20,14)
 		self.assertFalse(e.is_adjacent_to_the_hive(spot))
 	
 	def test_location_in_lp(self):
-		e = create_nice_board_and_hive()
+		e = create_nice_board_and_hive(10)
 		spot = (3,-10,7)
 		self.assertTrue(e.location_in_lp(spot))
 
 	def test_location_not_in_lp(self):
-		e = create_nice_board_and_hive()
+		e = create_nice_board_and_hive(10)
 		spot = (100,100,100)
 		self.assertFalse(e.location_in_lp(spot))
 
