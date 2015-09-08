@@ -1,20 +1,13 @@
 #TEST
 import unittest
-#import hive_canvas as hcan
 from board import Board
 from piece import Piece
-#from Tkinter import Tk, Canvas
 from location_and_piece import LocationPiece as lp
 import webbrowser
 import tempfile
 import time
 import webhive
-
-#def create_canvas():
-#	window = Tk()
-#	can = Canvas(window, width=500, height=500)
-#	can.pack()
-#	return can
+from fake_move_validator import FakeMoveValidator
 
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-10,7),
@@ -55,17 +48,35 @@ class TestHive(unittest.TestCase):
 		b.place_piece(lp(piece,place,60))
 		self.assertTrue(b.pieces_dict[place] == piece)
 
-	def test_move_piece(self):
-		b = Board(5,5,'0')
+	def test_board_moves_when_move_validator_allows_it(self):
+		move_validator = FakeMoveValidator()
+
+		b = Board(5,5,'0',move_validator)
 		
 		start_place = (0,0,0)
 		end_place = (0,1,-1)
 		p = Piece('_')
+
+		move_validator.allow_move(start_place, end_place, b.pieces_dict)
+
 		b.place_piece(lp(p, start_place,0))
 		b.move_piece(start_place, end_place)
 		self.assertTrue(b.pieces_dict[end_place] == p 
 				and start_place not in b.pieces_dict)
 		
+	def test_board_does_not_move_when_move_validator_disallows_it(self):
+		move_validator = FakeMoveValidator()
+		b = Board(5,5,'0',move_validator)
+		
+		start_place = (0,0,0)
+		end_place = (0,1,-1)
+		p = Piece('_')
+
+		b.place_piece(lp(p, start_place,0))
+		b.move_piece(start_place, end_place)
+		self.assertTrue(b.pieces_dict[start_place] == p 
+				and end_place not in b.pieces_dict)
+
 	def test_translate_wh_into_hex_coords(self):
 		e = Board(4,4,100)
 		self.assertTrue((3,-6,3) in e.translate_wh_into_hex_coords())
@@ -75,17 +86,6 @@ class TestHive(unittest.TestCase):
 		#sq = hcan.translate_hex_position_to_pixels(hex_pos, 10)
 		#self.assertTrue(hcan.translate_pixels_to_hex_position(sq, 10) == hex_pos)
 	
-	def test_is_valid_move(self):
-		e = Board(4,4,100)
-		start_hex_coords = (1,-2,1)
-		end_hex_coords = (1,-1,0)
-		p = Piece('exists')
-		
-		e.place_piece(lp(p,start_hex_coords,100))
-		self.assertTrue(e.is_valid_move(start_hex_coords,
-				end_hex_coords,
-				p.piece_type))
-
 	#def test_is_valid_move_because_of_hive_adjacency(self):
 		#e = create_nice_board_and_hive()
 
@@ -121,30 +121,5 @@ class TestHive(unittest.TestCase):
 		e.refresh_lp()
 		self.assertTrue(e.location_in_lp(spot))
 		
-		
-	#@unittest.skip('dont want to always print')
-	#def test_find_closest_hexagon(self):
-		#e = Board(20,20,10)
-		#pd = e.empty_grid
-		#p = Piece('-')
-		#e.place_piece((10,-20,10),p)
-		#empty = hcan.generate_sq_coords_and_types(pd,e.radius)
-		#pieces = hcan.generate_sq_coords_and_types(e.pieces_dict,e.radius)
-		#can = create_canvas()	
-		#h = hcan.HexGrid(e,e.radius,can)
-		#x_click = 156
-		#y_click = 265	
-		#self.assertTrue(h.find_closest_space(x_click,y_click) == (hcan.translate_hex_position_to_pixels((10,-20,10),10), None))
-
-	#@unittest.skip('dont want to always print')
-	#def test_printing_board(self):
-		#e = Board(100,100,50)
-		#p = Piece('exists')
-		#pd = e.empty_grid
-		#p = Piece('-')
-		#placed = e.pieces_dict
-		#
-		#hcan.main(e, e.radius)
-	
 if __name__ == '__main__':
 	unittest.main()
