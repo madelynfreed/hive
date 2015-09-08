@@ -7,7 +7,8 @@ import webbrowser
 import tempfile
 import time
 import webhive
-from fake_move_validator import FakeMoveValidator
+from fake_move_validator import FakeMoveValidator as fmv
+from move_validator import MoveValidator as mv
 
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-10,7),
@@ -22,24 +23,28 @@ def create_nice_board_and_hive(radius):
 
 class TestHive(unittest.TestCase):
 	def test_adjacent_spots(self):
-		b = Board(3,3,0)
-		self.assertTrue((1,0,-1) in b.adjacent_spots((0,0,0)))
+		#b = Board(3,3,0)
+		v = mv()
+		self.assertTrue((1,0,-1) in v.adjacent_spots((0,0,0)))
 	def test_non_adjacent_spots(self):
-		b = Board(0,0,0)
-		self.assertFalse((21,0,-1) in b.adjacent_spots((0,0,0)))
+		#b = Board(0,0,0)
+		v = mv()
+		self.assertFalse((21,0,-1) in v.adjacent_spots((0,0,0)))
 	def test_positions_are_adjacent(self):
-		a = Board(0,0,0)
+		v = mv()
 		m = (0,3,-3)
 		n = (-1,4,-3)
-		self.assertTrue(a.are_adjacent(m, n))
+		self.assertTrue(v.are_adjacent(m, n))
 	def test_empty_board(self):
 		empty = Board(5,5,60)
-		self.assertFalse(empty.space_has_piece_in_it((2,-2,0)))	
+		v = mv()
+		self.assertFalse(v.space_has_piece_in_it((2,-2,0),empty.pieces_dict))	
 	def test_space_has_a_piece_in_it(self):
 		b = Board(5,5,60)
 		p = Piece('_')
 		b.pieces_dict[(1,-2,1)] = p
-		self.assertTrue(b.space_has_piece_in_it((1,-2,1)))
+		v = mv()
+		self.assertTrue(v.space_has_piece_in_it((1,-2,1),b.pieces_dict))
 		
 	def test_place_piece(self):
 		b = Board(5,5,60)
@@ -49,7 +54,7 @@ class TestHive(unittest.TestCase):
 		self.assertTrue(b.pieces_dict[place] == piece)
 
 	def test_board_moves_when_move_validator_allows_it(self):
-		move_validator = FakeMoveValidator()
+		move_validator = fmv()
 
 		b = Board(5,5,'0',move_validator)
 		
@@ -65,7 +70,7 @@ class TestHive(unittest.TestCase):
 				and start_place not in b.pieces_dict)
 		
 	def test_board_does_not_move_when_move_validator_disallows_it(self):
-		move_validator = FakeMoveValidator()
+		move_validator = fmv()
 		b = Board(5,5,'0',move_validator)
 		
 		start_place = (0,0,0)
@@ -94,12 +99,14 @@ class TestHive(unittest.TestCase):
 	def test_is_adjacent_to_the_hive(self):
 		e = create_nice_board_and_hive(10)
 		spot = (2,-8,6)
-		self.assertTrue(e.is_adjacent_to_the_hive(spot))
+		v = mv()
+		self.assertTrue(v.is_adjacent_to_the_hive(spot,e.pieces_dict))
 
 	def test_is_not_adjacent_to_the_hive(self):
 		e = create_nice_board_and_hive(10)
 		spot = (6,-20,14)
-		self.assertFalse(e.is_adjacent_to_the_hive(spot))
+		v = mv()
+		self.assertFalse(v.is_adjacent_to_the_hive(spot, e.pieces_dict))
 	
 	def test_location_in_lp(self):
 		e = create_nice_board_and_hive(10)
