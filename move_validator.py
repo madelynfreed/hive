@@ -1,4 +1,3 @@
-visited = []
 class MoveValidator(object):
 	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
 		return (self.are_adjacent(start_hex_coord,
@@ -36,14 +35,14 @@ class MoveValidator(object):
 		return filter(lambda spot: pieces_dict.get(spot) != None, adj_spots)
 
 			
-	def find_all_new_neighs(self, spot, pieces_dict):
+	def find_all_new_neighs(self, spot, pieces_dict, visited):
 		unvisited = filter(
 			    lambda spot: spot not in visited,
 			    self.neighbors(spot, pieces_dict))
 		for each in unvisited:
 			visited.append(each)
 		for each in unvisited:
-			self.find_all_new_neighs(each, pieces_dict)
+			self.find_all_new_neighs(each, pieces_dict, visited)
 		return visited
 	def path_found_when_piece_is_moved(self, hex_position, pieces_dict):
 		#find hex_position's neighbors

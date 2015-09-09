@@ -38,13 +38,18 @@ class TestMoveValidator(unittest.TestCase):
 		v= mv()
 		e = board.create_nice_board_and_hive(10)
 		spot = (2,-6,4)
-		all_neighbors = v.find_all_new_neighs(spot, e.pieces_dict)
+		all_neighbors = v.find_all_new_neighs(spot, e.pieces_dict, [])
 		self.assertItemsEqual(all_neighbors, e.pieces_dict.keys())
 
 	def test_find_all_neighs_for_broken_hive(self):
 		v = mv()
 		e = board.create_nice_board_and_hive(10)
-		
+		e.pieces_dict.pop((3,-8,5),None)
+		spot = (2,-7,5)
+		all_neighbors = v.find_all_new_neighs(spot, e.pieces_dict, [])
+		self.assertItemsEqual(all_neighbors, [(2,-6,4),(2,-5,3),(3,-6,3),(2,-7,5)])
+
+	
 #	def test_path_found_when_piece_is_moved(self):
 #		v = mv()
 #		e = board.create_nice_board_and_hive(10)
