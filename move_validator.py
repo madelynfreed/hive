@@ -1,3 +1,4 @@
+visited = []
 class MoveValidator(object):
 	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
 		return (self.are_adjacent(start_hex_coord,
@@ -30,5 +31,36 @@ class MoveValidator(object):
 				     (x_coord, y_coord + 1, z_coord - 1)]
 		return [formula for formula in adj_spot_formulae]
 	
+	def neighbors(self, hex_position, pieces_dict):
+		adj_spots = self.adjacent_spots(hex_position)
+		return filter(lambda spot: pieces_dict.get(spot) != None, adj_spots)
 
+			
+	def find_all_new_neighs(self, spot, pieces_dict):
+		unvisited = filter(
+			    lambda spot: spot not in visited,
+			    self.neighbors(spot, pieces_dict))
+		for each in unvisited:
+			visited.append(each)
+		for each in unvisited:
+			self.find_all_new_neighs(each, pieces_dict)
+		return visited
+	def path_found_when_piece_is_moved(self, hex_position, pieces_dict):
+		#find hex_position's neighbors
+		neighbors_under_test = self.neighbors(hex_position, pieces_dict)
+		pieces_dict.pop(hex_position, None)
+		for neighbor in neighbors_under_test:
+			self.path_from_piece_to_piece(xxxxx)
+		#remove hex position from pieces_dict
+		#is there a path from neghbor1>2, 2>3, n>n+1?
+		#return if there is
 
+		pass
+	def path_from_piece_to_piece(self, spot1, spot2, visited_pieces, pieces_dict):
+		visited_pieces.append(spot1)
+		neighbors = filter(lambda spot: spot not in visited_pieces, self.neighbors(spot1, pieces_dict)) 
+		for neighbor in neighbors:
+			if neighbor == spot2:
+				return (True, neighbor)
+		return (False, visited_pieces)
+		

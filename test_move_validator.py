@@ -1,4 +1,5 @@
 import unittest
+import board
 from board import Board
 from move_validator import MoveValidator as mv
 from piece import Piece
@@ -33,6 +34,51 @@ class TestMoveValidator(unittest.TestCase):
 				end_hex_coords,
 				e.pieces_dict))
 
+	def test_find_all_new_neighbors_of_new_neighbors(self):
+		v= mv()
+		e = board.create_nice_board_and_hive(10)
+		spot = (2,-6,4)
+		all_neighbors = v.find_all_new_neighs(spot, e.pieces_dict)
+		self.assertItemsEqual(all_neighbors, e.pieces_dict.keys())
+
+	def test_find_all_neighs_for_broken_hive(self):
+		v = mv()
+		e = board.create_nice_board_and_hive(10)
+		
+#	def test_path_found_when_piece_is_moved(self):
+#		v = mv()
+#		e = board.create_nice_board_and_hive(10)
+#		spot = (3,-6,3)
+#		self.assertTrue(v.path_found_when_piece_is_moved(spot,e.pieces_dict))
+#
+#	def test_path_not_found_when_piece_is_moved(self):
+#		v = mv()
+#		e = board.create_nice_board_and_hive(10)
+#		spot = (3,-9,6)
+#		self.assertFalse(v.path_found_when_piece_is_moved(spot, e.pieces_dict))
+#
+#	def test_path_from_piece_to_piece(self):
+#		v = mv()
+#		e = board.create_nice_board_and_hive(10)
+#		spot1 = (3,-9,6)
+#		spot2 = (2,-9,7)
+#		visited_pieces = [(3,-10,7)]
+#		self.assertEqual(v.path_from_piece_to_piece(spot1,spot2,visited_pieces,e.pieces_dict), (False, [(3,-10,7),(3,-9,6)]))
+#		
+#	def test_path_from_piece_finds_target(self):
+#		v = mv()
+#		e = board.create_nice_board_and_hive(10)
+#		spot1 = (3,-9,6)
+#		spot2 = (3,-8,5)
+#		visited_pieces = [spot1]
+#		self.assertEqual(v.path_from_piece_to_piece(spot1,spot2,visited_pieces,e.pieces_dict), (True, (3,-8,5)))
+		
+	def test_neighbors(self):
+		v = mv()
+		b = board.create_nice_board_and_hive(10)
+		spot = (3,-9,6)
+		self.assertItemsEqual(v.neighbors(spot, b.pieces_dict), [(3,-8,5), (3,-10,7)])
+		
 	def test_adjacent_spots(self):
 		#b = Board(3,3,0)
 		v = mv()
@@ -59,6 +105,17 @@ class TestMoveValidator(unittest.TestCase):
 		b.pieces_dict[(1,-2,1)] = p
 		v = mv()
 		self.assertTrue(v.space_has_piece_in_it((1,-2,1),b.pieces_dict))
-	
+		
+	def test_is_adjacent_to_the_hive(self):
+		e = board.create_nice_board_and_hive(10)
+		spot = (2,-8,6)
+		v = mv()
+		self.assertTrue(v.is_adjacent_to_the_hive(spot,e.pieces_dict))
+
+	def test_is_not_adjacent_to_the_hive(self):
+		e = board.create_nice_board_and_hive(10)
+		spot = (6,-20,14)
+		v = mv()
+		self.assertFalse(v.is_adjacent_to_the_hive(spot, e.pieces_dict))
 if __name__ == '__main__':
 	unittest.main()

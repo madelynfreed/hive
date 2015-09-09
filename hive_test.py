@@ -1,5 +1,6 @@
 #TEST
 import unittest
+import board
 from board import Board
 from piece import Piece
 from location_and_piece import LocationPiece as lp
@@ -10,42 +11,8 @@ import webhive
 from fake_move_validator import FakeMoveValidator as fmv
 from move_validator import MoveValidator as mv
 
-nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
-	     (4,-8,4),(3,-9,6),(3,-10,7),
-	     (3,-8,5),(2,-5,3)]
-
-def create_nice_board_and_hive(radius):
-	e = Board(20,20,radius)
-	p = Piece('exists')
-	for position in nice_hive:
-		e.place_piece(lp(p, position,radius))
-	return e
-
 class TestHive(unittest.TestCase):
-	def test_adjacent_spots(self):
-		#b = Board(3,3,0)
-		v = mv()
-		self.assertTrue((1,0,-1) in v.adjacent_spots((0,0,0)))
-	def test_non_adjacent_spots(self):
-		#b = Board(0,0,0)
-		v = mv()
-		self.assertFalse((21,0,-1) in v.adjacent_spots((0,0,0)))
-	def test_positions_are_adjacent(self):
-		v = mv()
-		m = (0,3,-3)
-		n = (-1,4,-3)
-		self.assertTrue(v.are_adjacent(m, n))
-	def test_empty_board(self):
-		empty = Board(5,5,60)
-		v = mv()
-		self.assertFalse(v.space_has_piece_in_it((2,-2,0),empty.pieces_dict))	
-	def test_space_has_a_piece_in_it(self):
-		b = Board(5,5,60)
-		p = Piece('_')
-		b.pieces_dict[(1,-2,1)] = p
-		v = mv()
-		self.assertTrue(v.space_has_piece_in_it((1,-2,1),b.pieces_dict))
-		
+	
 	def test_place_piece(self):
 		b = Board(5,5,60)
 		place = (2,-4,2)
@@ -95,26 +62,15 @@ class TestHive(unittest.TestCase):
 		#e = create_nice_board_and_hive()
 
 		#pass
-		
-	def test_is_adjacent_to_the_hive(self):
-		e = create_nice_board_and_hive(10)
-		spot = (2,-8,6)
-		v = mv()
-		self.assertTrue(v.is_adjacent_to_the_hive(spot,e.pieces_dict))
-
-	def test_is_not_adjacent_to_the_hive(self):
-		e = create_nice_board_and_hive(10)
-		spot = (6,-20,14)
-		v = mv()
-		self.assertFalse(v.is_adjacent_to_the_hive(spot, e.pieces_dict))
+	
 	
 	def test_location_in_lp(self):
-		e = create_nice_board_and_hive(10)
+		e = board.create_nice_board_and_hive(10)
 		spot = (3,-10,7)
 		self.assertTrue(e.location_in_lp(spot))
 
 	def test_location_not_in_lp(self):
-		e = create_nice_board_and_hive(10)
+		e = board.create_nice_board_and_hive(10)
 		spot = (100,100,100)
 		self.assertFalse(e.location_in_lp(spot))
 

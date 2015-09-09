@@ -4,6 +4,18 @@ from piece import Piece
 from location_and_piece import LocationPiece as lp
 from move_validator import MoveValidator
 
+
+nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
+	     (4,-8,4),(3,-9,6),(3,-10,7),
+	     (3,-8,5),(2,-5,3)]
+
+def create_nice_board_and_hive(radius):
+	e = Board(20,20,radius)
+	p = Piece('exists')
+	for position in nice_hive:
+		e.place_piece(lp(p, position,radius))
+	return e
+
 class Board(object):
 	def __init__(self, width, height, radius, validator=MoveValidator()):
 		self.width = width

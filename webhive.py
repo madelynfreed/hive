@@ -1,13 +1,13 @@
 import math
 import text
-import hive_test
+import board
 from piece import Piece
 from location_and_piece import LocationPiece as lp
 
 class WebHive(object):
 	def __init__(self):
 		self.radius = 20
-		self.e = hive_test.create_nice_board_and_hive(self.radius)
+		self.e = board.create_nice_board_and_hive(self.radius)
 
 	def template_to_draw_hexes(self, location_pieces):
 		img_string = ''
