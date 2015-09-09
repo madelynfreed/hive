@@ -49,6 +49,19 @@ class TestMoveValidator(unittest.TestCase):
 		all_neighbors = v.find_all_new_neighs(spot, e.pieces_dict, [])
 		self.assertItemsEqual(all_neighbors, [(2,-6,4),(2,-5,3),(3,-6,3),(2,-7,5)])
 
+	def test_flood_catches_valid_pickup(self):
+		v = mv()
+		e = board.create_nice_board_and_hive(10)
+		p = Piece('exists')
+		elpe = lp(p,(4,-7,3),10)
+		e.place_piece(elpe)
+		spot = (2,-6,4)
+		self.assertTrue(v.flood(spot,e.pieces_dict))
+	def test_flood_catches_invalid_pickup(self):
+		v = mv()
+		e = board.create_nice_board_and_hive(10)
+		spot = (2,-6,4)
+		self.assertFalse(v.flood(spot,e.pieces_dict))
 	
 #	def test_path_found_when_piece_is_moved(self):
 #		v = mv()

@@ -22,12 +22,13 @@ class MoveValidator(object):
 		x_coord = hex_position[0]
 		y_coord = hex_position[1]
 		z_coord = hex_position[2]
-		adj_spot_formulae = [(x_coord + 1, y_coord, z_coord - 1),
-				     (x_coord + 1, y_coord -1, z_coord),
-				     (x_coord, y_coord -1, z_coord + 1),
-				     (x_coord - 1, y_coord, z_coord + 1),
-				     (x_coord - 1, y_coord + 1, z_coord),
-				     (x_coord, y_coord + 1, z_coord - 1)]
+		adj_spot_formulae = [
+			(x_coord + 1, y_coord, z_coord - 1),
+			(x_coord + 1, y_coord -1, z_coord),
+			(x_coord, y_coord -1, z_coord + 1),
+			(x_coord - 1, y_coord, z_coord + 1),
+			(x_coord - 1, y_coord + 1, z_coord),
+			(x_coord, y_coord + 1, z_coord - 1)]
 		return [formula for formula in adj_spot_formulae]
 	
 	def neighbors(self, hex_position, pieces_dict):
@@ -44,6 +45,13 @@ class MoveValidator(object):
 		for each in unvisited:
 			self.find_all_new_neighs(each, pieces_dict, visited)
 		return visited
+
+	def flood(self, spot, pieces_dict):
+		first_neigh = self.neighbors(spot,pieces_dict)[0]
+		pieces_dict.pop(spot, None)
+		visited = []
+		flooded = self.find_all_new_neighs(first_neigh, pieces_dict, visited)
+		return set(flooded) == set(pieces_dict.keys())
 	def path_found_when_piece_is_moved(self, hex_position, pieces_dict):
 		#find hex_position's neighbors
 		neighbors_under_test = self.neighbors(hex_position, pieces_dict)
