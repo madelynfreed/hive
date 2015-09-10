@@ -8,12 +8,16 @@ from move_validator import MoveValidator
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-10,7),
 	     (3,-8,5),(2,-5,3)]
+nice_hive_types = ['exists','grasshopper','ant','beetle','queen','spider','grasshopper','ant']
 
 def create_nice_board_and_hive(radius):
 	e = Board(20,20,radius)
 	p = Piece('exists')
+	g = Piece('grasshopper')
+	map(lambda loc_type: e.place_piece(lp(Piece(loc_type[1]),loc_type[0],radius)), zip(nice_hive, nice_hive_types))
 	for position in nice_hive:
 		e.place_piece(lp(p, position,radius))
+	e.place_piece(lp(g, (5,-8,3),radius))
 	return e
 
 class Board(object):
@@ -23,7 +27,7 @@ class Board(object):
 		self.radius = radius
 		self.validator = validator
 		self.positions = self.translate_wh_into_hex_coords()
-		self.empty_grid = {hex_coord:None for hex_coord in self.positions}
+		self.empty_grid = {hex_coord:lp(Piece("blank"),hex_coord,self.radius) for hex_coord in self.positions}
 		self.pieces_dict = {}
 
 		self.location_pieces = [

@@ -33,15 +33,6 @@ class WebHive(object):
 		piece_image = "/piece_image.png" 
 		blank_image = "/blank_image.png"
 
-#		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="40"></a>' % (
-#			location_piece.x,
-#			location_piece.y,
-#			location_piece.z,
-#			piece_image if location_piece.piece_object != None else blank_image,
-#			location_piece.id_from_hex,
-#			location_piece.a, 
-#			location_piece.b)
-
 		return '<a href="/click/%d/%d/%d"> <div class="hex_container" id="%s" style="left:%dpx; top:%dpx"> <div class="blankhexagon" id="%s"></div> </div></a>' % (
 			location_piece.x,
 			location_piece.y,
@@ -49,7 +40,7 @@ class WebHive(object):
 			location_piece.id_from_hex,
 			location_piece.a, 
 			location_piece.b,
-			"grasshopper" if location_piece.piece_object != None else "blank"
+			location_piece.piece_type
 			)
 
 	#radius = 153

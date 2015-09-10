@@ -9,9 +9,9 @@ from board import Board
 class TestMoveValidator(unittest.TestCase):
 	def test_is_valid_move(self):
 		v = mv()
-		e = Board(4,4,100,v)
-		start_hex_coords = (1,-2,1)
-		end_hex_coords = (1,-1,0)
+		e = board.create_nice_board_and_hive(10)
+		start_hex_coords = (5,-8,3)
+		end_hex_coords = (4,-7,3)
 		p = Piece('exists')
 		
 		e.place_piece(lp(p,start_hex_coords,100))

@@ -2,6 +2,7 @@ import math
 class LocationPiece(object):
 	def __init__(self, piece_object, hex_coordinates, radius):
 		self.piece_object = piece_object
+		self.piece_type = piece_object.piece_type
 		self.radius = radius
 		self.hex_coordinates = hex_coordinates
 		self.x = self.hex_coordinates[0]

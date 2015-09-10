@@ -8,12 +8,32 @@
   border-right: solid 5px #333333;
 }
 
-#grasshopper {
+#exists {
   background-color: #fe5af0;
 }
 
 #blank {
   background-color: #fffdfd;
+}
+
+#grasshopper {
+  background-color: #45d884;
+}
+
+#ant {
+  background-color: #d8c208;
+}
+
+#beetle {
+  background-color: #d87330;
+}
+
+#queen {
+  background-color: #d82532;
+}
+
+#spider {
+  background-color: #8469d8;
 }
 
 .blankhexagon:before,

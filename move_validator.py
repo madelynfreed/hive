@@ -49,7 +49,10 @@ class MoveValidator(object):
 		return visited
 
 	def flood(self, spot, pieces_dict):
-		first_neigh = self.neighbors(spot,pieces_dict)[0]
+		try:
+			first_neigh = self.neighbors(spot,pieces_dict)[0]
+		except IndexError:
+			return False
 		pieces_dict.pop(spot, None)
 		visited = []
 		flooded = self.find_all_new_neighs(first_neigh, pieces_dict, visited)
