@@ -16,8 +16,8 @@ class LocationPiece(object):
 		self.z = int(self.z)
 		self.x = int(self.x)
 		self.y = int(self.y)
-		a_coord = (3.0/2.0)*radius*self.z
-		b_coord = math.sqrt(3)*radius*(self.z/2.0 + self.x)
+		a_coord =  math.sqrt(3)*radius*(self.z/2.0 + self.x)
+		b_coord =(3.0/2.0)*radius*self.z
 		return (a_coord, b_coord)
 				
 	@property

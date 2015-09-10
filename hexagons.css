@@ -1,11 +1,19 @@
-blankhexagon {
+.blankhexagon {
   position: relative;
-  width: 300px; 
-  height: 173.21px;
+  width: 60px; 
+  height: 34.64px;
   background-color: #fffdfd;
-  margin: 86.60px 0;
+  margin: 17.32px 0;
   border-left: solid 5px #333333;
   border-right: solid 5px #333333;
+}
+
+#grasshopper {
+  background-color: #fe5af0;
+}
+
+#blank {
+  background-color: #fffdfd;
 }
 
 .blankhexagon:before,
@@ -13,23 +21,23 @@ blankhexagon {
   content: "";
   position: absolute;
   z-index: 1;
-  width: 212.13px;
-  height: 212.13px;
+  width: 42.43px;
+  height: 42.43px;
   -webkit-transform: scaleY(0.5774) rotate(-45deg);
   -ms-transform: scaleY(0.5774) rotate(-45deg);
   transform: scaleY(0.5774) rotate(-45deg);
   background-color: inherit;
-  left: 38.9340px;
+  left: 3.7868px;
 }
 
 .blankhexagon:before {
-  top: -106.0660px;
+  top: -21.2132px;
   border-top: solid 7.0711px #333333;
   border-right: solid 7.0711px #333333;
 }
 
 .blankhexagon:after {
-  bottom: -106.0660px;
+  bottom: -21.2132px;
   border-bottom: solid 7.0711px #333333;
   border-left: solid 7.0711px #333333;
 }

@@ -6,7 +6,7 @@ from location_and_piece import LocationPiece as lp
 
 class WebHive(object):
 	def __init__(self):
-		self.radius = 20
+		self.radius = 35
 		self.e = board.create_nice_board_and_hive(self.radius)
 
 	def template_to_draw_hexes(self, location_pieces):
@@ -16,6 +16,7 @@ class WebHive(object):
 		return img_string
 
 	def build_string(self):
+	#	return text.header() + '<a href="/click/0/0/0"> <div class="blankhexagon" id="0_0_0" style="left:0px; top:0px"></div></a>' + text.footer() 
 		return text.header() + self.template_to_draw_hexes(self.e.location_pieces_empty_grid) + self.template_to_draw_hexes(self.e.location_pieces) + text.footer()
 
 	def place_piece(self,x,y,z):
@@ -32,23 +33,24 @@ class WebHive(object):
 		piece_image = "/piece_image.png" 
 		blank_image = "/blank_image.png"
 
-		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="40"></a>' % (
-			location_piece.x,
-			location_piece.y,
-			location_piece.z,
-			piece_image if location_piece.piece_object != None else blank_image,
-			location_piece.id_from_hex,
-			location_piece.a, 
-			location_piece.b)
+#		return '<a href="/click/%d/%d/%d"><img src="%s" class="drawn_hexagons" id="%s" style="left:%dpx; top:%dpx" width="40"></a>' % (
+#			location_piece.x,
+#			location_piece.y,
+#			location_piece.z,
+#			piece_image if location_piece.piece_object != None else blank_image,
+#			location_piece.id_from_hex,
+#			location_piece.a, 
+#			location_piece.b)
 
-		return '<a href="/click/%d/%d/%d"> <div class="blankhexagon" id="%s" style="left:%dpx; top:%dpx" width="40"></div></a>' % (
+		return '<a href="/click/%d/%d/%d"> <div class="hex_container" id="%s" style="left:%dpx; top:%dpx"> <div class="blankhexagon" id="%s"></div> </div></a>' % (
 			location_piece.x,
 			location_piece.y,
 			location_piece.z,
-			#piece_image if location_piece.piece_object != None else blank_image,
 			location_piece.id_from_hex,
 			location_piece.a, 
-			location_piece.b)
+			location_piece.b,
+			"grasshopper" if location_piece.piece_object != None else "blank"
+			)
 
 	#radius = 153
 	#this specific radius is special for the image source
