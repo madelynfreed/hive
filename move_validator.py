@@ -2,6 +2,8 @@ class MoveValidator(object):
 	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
 		return (self.are_adjacent(start_hex_coord,
 				 end_hex_coord) 
+		and
+		self.flood(start_hex_coord, piece_dict)
 		and not 
 		self.space_has_piece_in_it(end_hex_coord, piece_dict)
 		and
