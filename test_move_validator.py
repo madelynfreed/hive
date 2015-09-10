@@ -7,12 +7,12 @@ from location_and_piece import LocationPiece as lp
 from board import Board
 
 class TestMoveValidator(unittest.TestCase):
-	def test_is_valid_move(self):
+	def test_is_valid_move_for_queen(self):
 		v = mv()
 		e = board.create_nice_board_and_hive(10)
 		start_hex_coords = (5,-8,3)
 		end_hex_coords = (4,-7,3)
-		p = Piece('exists')
+		p = Piece('queen')
 		
 		e.place_piece(lp(p,start_hex_coords,100))
 
@@ -20,20 +20,28 @@ class TestMoveValidator(unittest.TestCase):
 				end_hex_coords,
 				e.pieces_dict))
 
-	def test_move_does_not_work_because_invalid(self):
-
+	def test_move_does_not_work_because_invalid_for_queen(self):
 		v = mv()
-		e = Board(4,4,100)
-		start_hex_coords = (1,-2,1)
-		end_hex_coords = (1,-8,7)
-		p = Piece('exists')
+		e = board.create_nice_board_and_hive(10)
+		start_hex_coords = (4,-9,5)
+		end_hex_coords = (1,-4,3)
+		p = Piece('queen')
 		
-		e.place_piece(lp(p,start_hex_coords,100))
-
+		e.place_piece(lp(p,start_hex_coords,10))
+		
 		self.assertFalse(v.is_valid_move(start_hex_coords,
 				end_hex_coords,
 				e.pieces_dict))
 
+	def test_is_valid_move_for_grasshopper(self):
+		v = mv()
+		e = board.create_nice_board_and_hive(10)
+		start_hex_coords = (5,-8,3) 
+		#start coords for the grasshopper on the nice board
+		end_hex_coords = (2,-8,6)
+		
+		self.assertTrue(v.is_valid_move(start_hex_coords, end_hex_coords, e.pieces_dict))
+		
 	def test_find_all_new_neighbors_of_new_neighbors(self):
 		v= mv()
 		e = board.create_nice_board_and_hive(10)
