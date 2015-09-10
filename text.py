@@ -3,12 +3,7 @@ def header():
 	<html>
 	<head>
 	<meta charset="UTF-8">
-	<style>
-	img {
-		position: absolute;
-	}
-
-	</style>
+	<link rel="stylesheet" type="text/css" href="hexagons.css" />
 	</head>
 
 	<body>

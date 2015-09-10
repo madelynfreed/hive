@@ -24,6 +24,10 @@ def move_piece(x1, y1, z1, x2, y2, z2):
     wh.move_piece(*int_hexes)
     return wh.build_string()
 
+@app.route("/hexagons.css")
+def open_css():
+	return open("hexagons.css").read()
+
 @app.route("/piece_image.png")
 def piece_image():
     return open("piece_image.png").read()
