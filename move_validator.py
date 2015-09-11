@@ -1,9 +1,11 @@
+import numpy as np
 class MoveValidator(object):
 	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
+		piece_type = piece_dict[start_hex_coord].piece_type
 		if self.flood(start_hex_coord, piece_dict):
 			if not self.space_has_piece_in_it(end_hex_coord, piece_dict):
 				if self.is_adjacent_to_the_hive(end_hex_coord,piece_dict):
-					if self.queen_valid_move(start_hex_coord, end_hex_coord, piece_dict):
+					if self.piece_validity(piece_type, start_hex_coord, end_hex_coord, piece_dict):
 						return True
 					else:
 						return False
@@ -22,11 +24,45 @@ class MoveValidator(object):
 		#self.is_adjacent_to_the_hive(end_hex_coord, piece_dict)
 		#and self.queen_valid_move(start_hex_coord, end_hex_coord, piece_dict))		
 
+	def piece_validity(self, piece_type, start_hex_coord, end_hex_coord, piece_dict):
+		if piece_type == 'queen':
+			return self.queen_valid_move(start_hex_coord, end_hex_coord, piece_dict)
+		elif piece_type == 'grasshopper':
+			return self.grasshopper_valid_move(start_hex_coord, end_hex_coord, piece_dict)
+		else:
+			return True
+		
 
 	def queen_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
 		return (self.are_adjacent(start_hex_coord,
 				 end_hex_coord)) 
 
+	def grasshopper_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
+		delta = map(lambda pair: pair[1]-pair[0], zip(start_hex_coord, end_hex_coord))
+		
+		if delta.count(0) == 1:
+			all_pieces = [piece_dict.get(tuple(spot)) for spot in self.all_spots_between_two_inline_spots(start_hex_coord, end_hex_coord)]
+			for piece in all_pieces:
+				if piece == None:
+					return False
+				else:
+					return True
+		else:
+			return False
+
+			
+	def all_spots_between_two_inline_spots(self, start_hex_coord, end_hex_coord):
+		delta = tuple(map(lambda pair: pair[1]-pair[0], zip(start_hex_coord, end_hex_coord)))
+		length_of_line = max(delta)
+		digit = np.array(map(lambda coord: coord/length_of_line, delta))
+
+		check_space = np.array(start_hex_coord)
+		np_spots = list([check_space+(digit*i) for i in range(1, length_of_line)])
+	
+		return [list(spot) for spot in np_spots]
+		
+		#list(start-end) has exactly one 0 in it
+		#there are pieces between start and end
 
 	def are_adjacent(self, hexposition1, hexposition2):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
