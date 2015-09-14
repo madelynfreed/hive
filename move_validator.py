@@ -104,14 +104,15 @@ class MoveValidator(object):
 		return visited
 
 	def flood(self, spot, pieces_dict):
+		working_p_d = dict(pieces_dict)
 		try:
-			first_neigh = self.neighbors(spot,pieces_dict)[0]
+			first_neigh = self.neighbors(spot,working_p_d)[0]
 		except IndexError:
 			return False
-		pieces_dict.pop(spot, None)
+		working_p_d.pop(spot, None)
 		visited = []
-		flooded = self.find_all_new_neighs(first_neigh, pieces_dict, visited)
-		return set(flooded) == set(pieces_dict.keys())
+		flooded = self.find_all_new_neighs(first_neigh, working_p_d, visited)
+		return set(flooded) == set(working_p_d.keys())
 	def path_found_when_piece_is_moved(self, hex_position, pieces_dict):
 		#find hex_position's neighbors
 		neighbors_under_test = self.neighbors(hex_position, pieces_dict)

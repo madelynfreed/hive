@@ -15,9 +15,10 @@ def create_nice_board_and_hive(radius):
 	p = Piece('exists')
 	g = Piece('grasshopper')
 	map(lambda loc_type: e.place_piece(lp(Piece(loc_type[1]),loc_type[0],radius)), zip(nice_hive, nice_hive_types))
-	for position in nice_hive:
-		e.place_piece(lp(p, position,radius))
+	print "PLACING THE GRASSHOPPERSLDKFJSDKJF"
+	print e.pieces_dict
 	e.place_piece(lp(g, (5,-8,3),radius))
+	print e.pieces_dict
 	return e
 
 class Board(object):
@@ -58,6 +59,8 @@ class Board(object):
 		
 	def move_piece(self, hex_coord, end_hex_coord):
 		if self.validator.is_valid_move(hex_coord, end_hex_coord, self.pieces_dict):
+			print "THISISISISISISISIS"
+			print self.pieces_dict
 			self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
 			self.pieces_dict.pop(hex_coord)
 			self.refresh_lp()
