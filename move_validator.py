@@ -1,11 +1,11 @@
 import numpy as np
 class MoveValidator(object):
-	def is_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
-		piece_type = piece_dict[start_hex_coord].piece_type
-		if self.flood(start_hex_coord, piece_dict):
-			if not self.space_has_piece_in_it(end_hex_coord, piece_dict):
-				if self.is_adjacent_to_the_hive(end_hex_coord,piece_dict):
-					if self.piece_validity(piece_type, start_hex_coord, end_hex_coord, piece_dict):
+	def is_valid_move(self, start_hex_coord, end_hex_coord, pieces_dict):
+		piece_type = pieces_dict[start_hex_coord].piece_type
+		if self.flood(start_hex_coord, pieces_dict):
+			if not self.space_has_piece_in_it(end_hex_coord, pieces_dict):
+				if self.is_adjacent_to_the_hive(end_hex_coord,pieces_dict):
+					if self.piece_validity(piece_type, start_hex_coord, end_hex_coord, pieces_dict):
 						return True
 					else:
 						return False
@@ -15,33 +15,25 @@ class MoveValidator(object):
 				return False
 		else:
 			return False
-		#piece_type = piece_dict[start_hex_coord].piece_type
-		
-		#return (self.flood(start_hex_coord, piece_dict)
-		#and not 
-		#self.space_has_piece_in_it(end_hex_coord, piece_dict)
-		#and
-		#self.is_adjacent_to_the_hive(end_hex_coord, piece_dict)
-		#and self.queen_valid_move(start_hex_coord, end_hex_coord, piece_dict))		
 
-	def piece_validity(self, piece_type, start_hex_coord, end_hex_coord, piece_dict):
+	def piece_validity(self, piece_type, start_hex_coord, end_hex_coord, pieces_dict):
 		if piece_type == 'queen':
-			return self.queen_valid_move(start_hex_coord, end_hex_coord, piece_dict)
+			return self.queen_valid_move(start_hex_coord, end_hex_coord, pieces_dict)
 		elif piece_type == 'grasshopper':
-			return self.grasshopper_valid_move(start_hex_coord, end_hex_coord, piece_dict)
+			return self.grasshopper_valid_move(start_hex_coord, end_hex_coord, pieces_dict)
 		else:
 			return True
 		
 
-	def queen_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
+	def queen_valid_move(self, start_hex_coord, end_hex_coord, pieces_dict):
 		return (self.are_adjacent(start_hex_coord,
-				 end_hex_coord)) 
+				 end_hex_coord) and not self.is_stuck(start_hex_coord, pieces_dict)) 
 
-	def grasshopper_valid_move(self, start_hex_coord, end_hex_coord, piece_dict):
+	def grasshopper_valid_move(self, start_hex_coord, end_hex_coord, pieces_dict):
 		delta = map(lambda pair: pair[1]-pair[0], zip(start_hex_coord, end_hex_coord))
 		
 		if delta.count(0) == 1:
-			all_pieces = [piece_dict.get(tuple(spot)) for spot in self.all_spots_between_two_inline_spots(start_hex_coord, end_hex_coord)]
+			all_pieces = [pieces_dict.get(tuple(spot)) for spot in self.all_spots_between_two_inline_spots(start_hex_coord, end_hex_coord)]
 			for piece in all_pieces:
 				if piece == None:
 					return False
@@ -61,9 +53,6 @@ class MoveValidator(object):
 	
 		return [list(spot) for spot in np_spots]
 		
-		#list(start-end) has exactly one 0 in it
-		#there are pieces between start and end
-
 	def are_adjacent(self, hexposition1, hexposition2):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
 
@@ -74,6 +63,18 @@ class MoveValidator(object):
 		l = [self.adjacent_spots(hex_coo) for hex_coo in pieces_dict.keys()]
 		flat_list = reduce(lambda x,y: x+y, l)
 		return  hex_coord in flat_list 
+
+	def is_stuck(self, hex_position, pieces_dict):
+		if 2 < len(self.neighbors(hex_position, pieces_dict)) < 5:
+			empty_spots = self.empty_neighbors(hex_position, pieces_dict)
+			for each in empty_spots:
+				return not any(self.are_adjacent(each, other_spot) 
+						for other_spot in empty_spots)
+		elif len(self.neighbors(hex_position, pieces_dict)) >= 5:
+			return True 
+		else:
+			return False
+
 
 	def adjacent_spots(self, hex_position):
 		x_coord = hex_position[0]
@@ -92,6 +93,9 @@ class MoveValidator(object):
 		adj_spots = self.adjacent_spots(hex_position)
 		return filter(lambda spot: pieces_dict.get(spot) != None, adj_spots)
 
+	def empty_neighbors(self, hex_position, pieces_dict):
+		adj_spots = self.adjacent_spots(hex_position)
+		return filter(lambda spot: pieces_dict.get(spot) == None, adj_spots)
 			
 	def find_all_new_neighs(self, spot, pieces_dict, visited):
 		unvisited = filter(

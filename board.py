@@ -15,10 +15,7 @@ def create_nice_board_and_hive(radius):
 	p = Piece('exists')
 	g = Piece('grasshopper')
 	map(lambda loc_type: e.place_piece(lp(Piece(loc_type[1]),loc_type[0],radius)), zip(nice_hive, nice_hive_types))
-	print "PLACING THE GRASSHOPPERSLDKFJSDKJF"
-	print e.pieces_dict
 	e.place_piece(lp(g, (5,-8,3),radius))
-	print e.pieces_dict
 	return e
 
 class Board(object):

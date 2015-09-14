@@ -19,10 +19,10 @@ class WebHive(object):
 	#	return text.header() + '<a href="/click/0/0/0"> <div class="blankhexagon" id="0_0_0" style="left:0px; top:0px"></div></a>' + text.footer() 
 		return text.header() + self.template_to_draw_hexes(self.e.location_pieces_empty_grid) + self.template_to_draw_hexes(self.e.location_pieces) + text.footer()
 
-	def place_piece(self,x,y,z):
+	def place_piece(self,piece_type,x,y,z):
 		print "PLACE PIECE"
-		print type(x), type(y), type(z)
-		locpie = lp(Piece('exists'), (x,y,z), self.radius)
+		print x, y, z
+		locpie = lp(Piece(piece_type), (x,y,z), self.radius)
 		self.e.place_piece(locpie)
 
 	def move_piece(self, x1, y1, z1, x2, y2, z2):

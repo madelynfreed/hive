@@ -8,6 +8,44 @@ from board import Board
 import numpy as np
 
 class TestMoveValidator(unittest.TestCase):
+	def test_empty_neighbors(self):
+		v = mv()
+		hex_spot = (7,-10,3)
+		spots = [(6,-9,3),(8,-10,2),(7,-11,4)]
+		empty_spots = [(6,-10,4),(8,-11,3),(7,-9,2)]
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda spot: e.place_piece(lp(p,spot,10)), spots)
+		self.assertItemsEqual(v.empty_neighbors(hex_spot, e.pieces_dict),empty_spots)
+
+		
+	def test_is_stuck(self):
+		v = mv()
+		hex_spot = (7,-10,3)
+		spots = [(6,-9,3),(8,-10,2),(7,-11,4)]
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda spot: e.place_piece(lp(p,spot,10)), spots)
+		self.assertTrue(v.is_stuck(hex_spot, e.pieces_dict))
+
+	def test_is_stuck_with_many_neighbors(self):
+		v = mv()
+		hex_spot = (7,-10,3)
+		spots = [(6,-9,3),(8,-10,2),(7,-11,4),(7,-9,2),(8,-11,3)]
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda spot: e.place_piece(lp(p,spot,10)), spots)
+		self.assertTrue(v.is_stuck(hex_spot, e.pieces_dict))
+
+	def test_is_not_stuck(self):
+		v = mv()
+		hex_spot = (7,-10,3)
+		spots = [(6,-9,3),(8,-10,2),(7,-9,2),(8,-11,3)]
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda spot: e.place_piece(lp(p,spot,10)), spots)
+		self.assertFalse(v.is_stuck(hex_spot, e.pieces_dict))
+
 	def test_is_valid_move_for_queen(self):
 		v = mv()
 		e = board.create_nice_board_and_hive(10)
