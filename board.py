@@ -53,6 +53,7 @@ class Board(object):
 		else:
 			self.pieces_dict[locpiece.hex_coordinates] = locpiece.piece_object
 			self.refresh_lp()
+			#print self.pieces_dict.keys()
 		
 	def move_piece(self, hex_coord, end_hex_coord):
 		if self.validator.is_valid_move(hex_coord, end_hex_coord, self.pieces_dict):

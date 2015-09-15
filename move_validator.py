@@ -53,7 +53,31 @@ class MoveValidator(object):
 	
 		return [list(spot) for spot in np_spots]
 		
-	def are_adjacent(self, hexposition1, hexposition2):
+	def spots_in_ant_path(self, hex_position, pieces_dict):
+		return [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
+			(9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
+			(13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
+			(12,-20,8),(11,-12,9),(10,-19,9),(9,-18,9)]
+
+        def find_unstuck_empty_spots(self, start_hex, hive_adjacent, ant_path, pieces_dict):
+		neigh_spot = set(self.adjacent_spots(start_hex))
+		hive_neighs = neigh_spot.intersection(hive_adjacent)
+		unvisited_hive_neighs = hive_neighs.difference(ant_path)
+		good_spots = filter (lambda neigh: self.has_empty_shared_neighbor(start_hex, neigh, pieces_dict), unvisited_hive_neighs)
+		map(lambda spot: ant_path.add(spot), good_spots)
+
+		for each in good_spots:
+			self.find_unstuck_empty_spots(each, hive_adjacent, ant_path, pieces_dict)
+		return ant_path
+		
+        def has_empty_shared_neighbor(self, start_hex_coord, neigh_hex_coord, pieces_dict):
+		start = set(self.adjacent_spots(start_hex_coord))
+		neigh = set(self.adjacent_spots(neigh_hex_coord))
+		shared_neighbors = start.intersection(neigh)
+		shared_neighbor_pieces = shared_neighbors.intersection(set(pieces_dict.keys()))
+                return len(shared_neighbor_pieces) != 2
+
+        def are_adjacent(self, hexposition1, hexposition2):
 		return hexposition1 in self.adjacent_spots(hexposition2) 
 
 	def space_has_piece_in_it(self, hex_coord, pieces_dict):
