@@ -8,6 +8,30 @@ from board import Board
 import numpy as np
 
 class TestMoveValidator(unittest.TestCase):
+	def test_empty_spots_adjacent_to_hive(self):
+		hive_spots = [(2, -5, 3), (2, -3, 1), (3, -5, 2), (1, -3, 2), (1, -4, 3), (3, -4, 1)]
+		empty_spots = [(3, -6, 3), (2, -6, 4), (4, -6, 2), (2, -4, 2), (4, -5, 1), (2, -2, 0), (3, -3, 0), (4, -4, 0), (1, -2, 1), (0, -2, 2), (0, -3, 3), (1, -5, 4), (0, -4, 4)]
+		v = mv()
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
+		self.assertItemsEqual(v.empty_spots_adjacent_to_hive(e.pieces_dict), empty_spots)
+		
+	def test_complicated_empty_spots_adjacent_to_hive(self):
+		v = mv()
+		hive_spots = [(10,-18,8),(11,-18,7),(12,-18,6),
+			      (12,-17,5),(11,-16,5),(10,-15,5),
+			      (9,-15,6),(9,-16,7)]
+		adjacent_spots = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
+				  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
+				  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
+				  (11,-19,8),(10,-19,9),(9,-18,9),
+				  (10,-17,7),(11,-17,6),(10,-16,6)]
+		e = Board(20,20,10)
+		p = Piece('exists')
+		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
+		self.assertItemsEqual(v.empty_spots_adjacent_to_hive(e.pieces_dict), adjacent_spots)
+
         def test_has_empty_shared_neighbor(self):
 		v = mv()
 		e = Board(20,20,10)
@@ -32,10 +56,58 @@ class TestMoveValidator(unittest.TestCase):
                 ant_spot = (3,-6,3)
 		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
                 self.assertEqual(v.find_unstuck_empty_spots(ant_spot, adjacent_spots, set(), e.pieces_dict), adjacent_spots)
+
+	def test_find_unstuck_empty_with_inaccesible_spots(self):
+		v = mv()
+		e = Board(20,20,10)
+		p = Piece('exists')
+		hive_spots = [(5, -10, 5), (6, -13, 7), (5, -13, 8), (8, -12, 4), 
+			      (7, -15, 8), (5, -11, 6), (4, -11, 7), (7, -11, 4), 
+			      (6, -11, 5), (8, -15, 7), (7, -12, 5), (4, -12, 8), 
+			      (5, -12, 7), (8, -14, 6), (4, -10, 6), (7, -14, 7), 
+			      (8, -13, 5), (9, -14, 5), (6, -10, 4), (9, -15, 6), 
+			      (9, -13, 4)]
+		adjacent_spots = [(3, -9, 6), (7, -10, 3), (8, -16, 8), (10, -14, 4), 
+				(9, -12, 3), (7, -16, 9), (3, -12, 9), (6, -9, 3), 
+				(6, -15, 9), (5, -14, 9), (5, -9, 4), (10, -13, 3), 
+				(3, -10, 7), (10, -16, 6), (10, -15, 5), (4, -13, 9), 
+				(3, -11, 8), (4, -9, 5), (8, -11, 3), (9, -16, 7),
+				(6,-12,6),(7,-13,6)]
+		unstuck_spots = set([(3, -9, 6), (7, -10, 3), (8, -16, 8), (10, -14, 4), 
+				(9, -12, 3), (7, -16, 9), (3, -12, 9), (6, -9, 3), 
+				(6, -15, 9), (5, -14, 9), (5, -9, 4), (10, -13, 3), 
+				(3, -10, 7), (10, -16, 6), (10, -15, 5), (4, -13, 9), 
+				(3, -11, 8), (4, -9, 5), (8, -11, 3), (9, -16, 7)])
+		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
+		start_spot = (6,-14,8)
+                self.assertEqual(v.find_unstuck_empty_spots(start_spot, adjacent_spots, set(), e.pieces_dict), unstuck_spots)
+		
+		
+	def test_find_unstuck_empty_with_blocked_spot(self):
+		v = mv()
+		e = Board(20,20,10)
+		p = Piece('exists')
+		hive_spots = [(8, -12, 4), (6, -13, 7), (5, -10, 5), (8, -14, 6), 
+				(6, -10, 4), (8, -13, 5), (7, -11, 4), (5, -11, 6), 
+				(5, -12, 7)]
+		adjacent_spots = [(6, -12, 6), (7, -14, 7), (7, -13, 6), (4, -12, 8), 
+				(9, -14, 5), (7, -10, 3), (9, -15, 6), (9, -12, 3), 
+				(6, -14, 8), (6, -9, 3), (5, -13, 8), (4, -11, 7), 
+				(4, -9, 5), (4, -10, 6), (9, -13, 4), (6, -11, 5), 
+				(8, -11, 3), (7, -12, 5), (5, -9, 4)]
+		unstuck_spots = set([(7, -14, 7), (4, -12, 8), (9, -14, 5), (7, -10, 3), 
+				(9, -15, 6), (9, -12, 3), (6, -14, 8), (6, -9, 3), 
+				(5, -13, 8), (4, -11, 7), (4, -9, 5), (4, -10, 6), 
+				(9, -13, 4), (8, -11, 3), (5, -9, 4)])
+		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
+		start_spot = (8,-15,7)
+                self.assertEqual(v.find_unstuck_empty_spots(start_spot, adjacent_spots, set(), e.pieces_dict), unstuck_spots)
+		
+		
 	def test_ant_path(self):
 		v = mv()
 		ant_spot = (11,-19,8)
-		hive_spots = [(11,-19,8),(10,-18,8),(11,18,7),(12,-18,6),(12,-17,5),(11,-16,5),(10,-15,5),(9,-15,6),(9,-16,7)]
+		hive_spots = [(11,-19,8),(10,-18,8),(11,-18,7),(12,-18,6),(12,-17,5),(11,-16,5),(10,-15,5),(9,-15,6),(9,-16,7)]
 		adjacent_spots = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
 				  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
 				  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
@@ -44,6 +116,7 @@ class TestMoveValidator(unittest.TestCase):
 		p = Piece('exists')
 		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
 		self.assertItemsEqual(v.spots_in_ant_path(ant_spot, e.pieces_dict), adjacent_spots)
+
 	def test_simple_ant_path(self):
 		v = mv()
 		ant_spot = (11,-19,8)
@@ -168,33 +241,6 @@ class TestMoveValidator(unittest.TestCase):
 		spot = (2,-6,4)
 		self.assertFalse(v.flood(spot,e.pieces_dict))
 	
-#	def test_path_found_when_piece_is_moved(self):
-#		v = mv()
-#		e = board.create_nice_board_and_hive(10)
-#		spot = (3,-6,3)
-#		self.assertTrue(v.path_found_when_piece_is_moved(spot,e.pieces_dict))
-#
-#	def test_path_not_found_when_piece_is_moved(self):
-#		v = mv()
-#		e = board.create_nice_board_and_hive(10)
-#		spot = (3,-9,6)
-#		self.assertFalse(v.path_found_when_piece_is_moved(spot, e.pieces_dict))
-#
-#	def test_path_from_piece_to_piece(self):
-#		v = mv()
-#		e = board.create_nice_board_and_hive(10)
-#		spot1 = (3,-9,6)
-#		spot2 = (2,-9,7)
-#		visited_pieces = [(3,-10,7)]
-#		self.assertEqual(v.path_from_piece_to_piece(spot1,spot2,visited_pieces,e.pieces_dict), (False, [(3,-10,7),(3,-9,6)]))
-#		
-#	def test_path_from_piece_finds_target(self):
-#		v = mv()
-#		e = board.create_nice_board_and_hive(10)
-#		spot1 = (3,-9,6)
-#		spot2 = (3,-8,5)
-#		visited_pieces = [spot1]
-#		self.assertEqual(v.path_from_piece_to_piece(spot1,spot2,visited_pieces,e.pieces_dict), (True, (3,-8,5)))
 		
 	def test_neighbors(self):
 		v = mv()
@@ -228,17 +274,6 @@ class TestMoveValidator(unittest.TestCase):
 		b.pieces_dict[(1,-2,1)] = p
 		v = mv()
 		self.assertTrue(v.space_has_piece_in_it((1,-2,1),b.pieces_dict))
-		
-	def test_is_adjacent_to_the_hive(self):
-		e = board.create_nice_board_and_hive(10)
-		spot = (2,-8,6)
-		v = mv()
-		self.assertTrue(v.is_adjacent_to_the_hive(spot,e.pieces_dict))
-
-	def test_is_not_adjacent_to_the_hive(self):
-		e = board.create_nice_board_and_hive(10)
-		spot = (6,-20,14)
-		v = mv()
-		self.assertFalse(v.is_adjacent_to_the_hive(spot, e.pieces_dict))
+	
 if __name__ == '__main__':
 	unittest.main()

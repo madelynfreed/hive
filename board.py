@@ -5,6 +5,23 @@ from location_and_piece import LocationPiece as lp
 from move_validator import MoveValidator
 
 
+
+complicated_hive = [(11,-19,8),(10,-18,8),(11,-18,7),(12,-18,6),(12,-17,5),(11,-16,5),(10,-15,5),(9,-15,6),(9,-16,7)]
+adjacent_spots = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
+		  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
+		  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
+		  (12,-20,8),(11,-12,9),(10,-19,9),(9,-18,9)]
+
+
+def create_complicated_board_and_hive(radius):
+	e = Board(20,20,radius)
+	p = Piece('exists')
+	a = Piece('ant')
+	map(lambda adj_spot: e.place_piece(lp(p,adj_spot, radius)), adjacent_spots)
+	map(lambda hive_spot: e.place_piece(lp(a,hive_spot, radius)), complicated_hive)
+	return e
+	
+
 nice_hive = [(3,-6,3),(2,-6,4),(2,-7,5),
 	     (4,-8,4),(3,-9,6),(3,-10,7),
 	     (3,-8,5),(2,-5,3)]
@@ -53,7 +70,7 @@ class Board(object):
 		else:
 			self.pieces_dict[locpiece.hex_coordinates] = locpiece.piece_object
 			self.refresh_lp()
-			#print self.pieces_dict.keys()
+			print self.pieces_dict.keys()
 		
 	def move_piece(self, hex_coord, end_hex_coord):
 		if self.validator.is_valid_move(hex_coord, end_hex_coord, self.pieces_dict):

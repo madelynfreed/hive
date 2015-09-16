@@ -4,7 +4,8 @@ class MoveValidator(object):
 		piece_type = pieces_dict[start_hex_coord].piece_type
 		if self.flood(start_hex_coord, pieces_dict):
 			if not self.space_has_piece_in_it(end_hex_coord, pieces_dict):
-				if self.is_adjacent_to_the_hive(end_hex_coord,pieces_dict):
+				#if self.is_adjacent_to_the_hive(end_hex_coord,pieces_dict):
+				if end_hex_coord in self.empty_spots_adjacent_to_hive(pieces_dict):	
 					if self.piece_validity(piece_type, start_hex_coord, end_hex_coord, pieces_dict):
 						return True
 					else:
@@ -54,11 +55,11 @@ class MoveValidator(object):
 		return [list(spot) for spot in np_spots]
 		
 	def spots_in_ant_path(self, hex_position, pieces_dict):
-		return [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
-			(9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
-			(13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
-			(12,-20,8),(11,-12,9),(10,-19,9),(9,-18,9)]
-
+		pieces_dict = dict(pieces_dict)
+		pieces_dict.pop(hex_position)
+		hive_adjacent = set(self.empty_spots_adjacent_to_hive(pieces_dict))
+		path = set()
+		return self.find_unstuck_empty_spots(hex_position, hive_adjacent, path, pieces_dict)
         def find_unstuck_empty_spots(self, start_hex, hive_adjacent, ant_path, pieces_dict):
 		neigh_spot = set(self.adjacent_spots(start_hex))
 		hive_neighs = neigh_spot.intersection(hive_adjacent)
@@ -83,10 +84,16 @@ class MoveValidator(object):
 	def space_has_piece_in_it(self, hex_coord, pieces_dict):
 		return hex_coord in pieces_dict
 
-	def is_adjacent_to_the_hive(self, hex_coord, pieces_dict):
+	#def is_adjacent_to_the_hive(self, hex_coord, pieces_dict):
+		#l = [self.adjacent_spots(hex_coo) for hex_coo in pieces_dict.keys()]
+		#flat_list = reduce(lambda x,y: x+y, l)
+		#return hex_coord in flat_list 
+
+	def empty_spots_adjacent_to_hive(self, pieces_dict):
 		l = [self.adjacent_spots(hex_coo) for hex_coo in pieces_dict.keys()]
-		flat_list = reduce(lambda x,y: x+y, l)
-		return  hex_coord in flat_list 
+		flat_set = set(reduce(lambda x,y: x+y, l))
+		return flat_set.difference(set(pieces_dict.keys()))
+		
 
 	def is_stuck(self, hex_position, pieces_dict):
 		if 2 < len(self.neighbors(hex_position, pieces_dict)) < 5:
