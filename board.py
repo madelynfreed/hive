@@ -10,7 +10,7 @@ complicated_hive = [(11,-19,8),(10,-18,8),(11,-18,7),(12,-18,6),(12,-17,5),(11,-
 adjacent_spots = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
 		  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
 		  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
-		  (12,-20,8),(11,-12,9),(10,-19,9),(9,-18,9)]
+		  (12,-20,8),(11,-20,9),(10,-19,9),(9,-18,9)]
 
 
 def create_complicated_board_and_hive(radius):
@@ -70,7 +70,7 @@ class Board(object):
 		else:
 			self.pieces_dict[locpiece.hex_coordinates] = locpiece.piece_object
 			self.refresh_lp()
-			print self.pieces_dict.keys()
+			#print self.pieces_dict.keys()
 		
 	def move_piece(self, hex_coord, end_hex_coord):
 		if self.validator.is_valid_move(hex_coord, end_hex_coord, self.pieces_dict):

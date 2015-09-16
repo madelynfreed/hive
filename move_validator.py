@@ -58,6 +58,7 @@ class MoveValidator(object):
 		pieces_dict = dict(pieces_dict)
 		pieces_dict.pop(hex_position)
 		hive_adjacent = set(self.empty_spots_adjacent_to_hive(pieces_dict))
+		hive_adjacent.remove(hex_position)
 		path = set()
 		return self.find_unstuck_empty_spots(hex_position, hive_adjacent, path, pieces_dict)
         def find_unstuck_empty_spots(self, start_hex, hive_adjacent, ant_path, pieces_dict):

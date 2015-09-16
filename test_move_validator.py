@@ -104,6 +104,7 @@ class TestMoveValidator(unittest.TestCase):
                 self.assertEqual(v.find_unstuck_empty_spots(start_spot, adjacent_spots, set(), e.pieces_dict), unstuck_spots)
 		
 		
+	
 	def test_ant_path(self):
 		v = mv()
 		ant_spot = (11,-19,8)
@@ -111,20 +112,27 @@ class TestMoveValidator(unittest.TestCase):
 		adjacent_spots = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
 				  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
 				  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
-				  (12,-20,8),(11,-12,9),(10,-19,9),(9,-18,9)]
+				  (12,-20,8),(11,-20,9),(10,-19,9),(9,-18,9),
+				  (10,-17,7),(10,-16,6),(11,-17,6)]
+
+		ant_path = [(9,-17,8),(8,-16,8),(8,-15,7),(8,-14,6),
+				  (9,-14,5),(10,-14,4),(11,-15,4),(12,-16,4),
+				  (13,-17,4),(13,-18,5),(13,-19,6),(12,-19,7),
+				  (10,-19,9),(9,-18,9)]
 		e = Board(20,20,10)
 		p = Piece('exists')
 		map(lambda hive_spots: e.place_piece(lp(p,hive_spots,10)), hive_spots)
-		self.assertItemsEqual(v.spots_in_ant_path(ant_spot, e.pieces_dict), adjacent_spots)
+		self.assertItemsEqual(v.spots_in_ant_path(ant_spot, e.pieces_dict), ant_path)
 
 	def test_simple_ant_path(self):
 		v = mv()
-		ant_spot = (11,-19,8)
-		adjacent_spots = [(11,-18,7),(12,-19,7),(12,-20,8),
-				  (11,-20,9),(10,-19,9),(10,-18,8)]
+		hive_spots = [(6, -9, 3), (5, -8, 3)]
+		adjacent_spots = [(4, -8, 4), (5, -7, 2), (4, -7, 3), (6, -8, 2), (5, -9, 4)]
+		ant_spot = (6,-9,3)
 		e = Board(20,20,10)
 		p = Piece('exists')
-		e.place_piece(lp(p,ant_spot,10))
+		e.place_piece(lp(p,hive_spots[0],10))
+		e.place_piece(lp(p,hive_spots[1],10))
 		self.assertItemsEqual(v.spots_in_ant_path(ant_spot, e.pieces_dict), adjacent_spots)
 		
 	def test_empty_neighbors(self):
