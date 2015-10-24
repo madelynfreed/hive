@@ -8,31 +8,31 @@
   border-right: solid 5px #333333;
 }
 
-#exists {
+.exists {
   background-color: #fe5af0;
 }
 
-#blank {
+.blank {
   background-color: #fffdfd;
 }
 
-#grasshopper {
+.grasshopper {
   background-color: #45d884;
 }
 
-#ant {
+.ant {
   background-color: #d8c208;
 }
 
-#beetle {
+.beetle {
   background-color: #d87330;
 }
 
-#queen {
+.queen {
   background-color: #d82532;
 }
 
-#spider {
+.spider {
   background-color: #8469d8;
 }
 

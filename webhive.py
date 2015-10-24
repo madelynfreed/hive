@@ -7,8 +7,8 @@ from location_and_piece import LocationPiece as lp
 class WebHive(object):
 	def __init__(self):
 		self.radius = 35
-		#self.e = board.create_nice_board_and_hive(self.radius)
-		self.e = board.Board(20,20,self.radius)
+		self.e = board.create_nice_board_and_hive(self.radius)
+		#self.e = board.Board(20,20,self.radius)
 		#self.e = board.create_complicated_board_and_hive(self.radius)
 
 	def template_to_draw_hexes(self, location_pieces):
@@ -32,10 +32,7 @@ class WebHive(object):
 			
 	@staticmethod
 	def hex_at_square_coords(location_piece):
-		piece_image = "/piece_image.png" 
-		blank_image = "/blank_image.png"
-
-		return '<a href="/click/%d/%d/%d"> <div class="hex_container" id="%s" style="left:%dpx; top:%dpx"> <div class="blankhexagon" id="%s"></div> </div></a>' % (
+		return '<p href="/click/%d/%d/%d"> <div class="hex_container" id="%s" style="left:%dpx; top:%dpx"> <div class="blankhexagon %s"></div> </div></p>' % (
 			location_piece.x,
 			location_piece.y,
 			location_piece.z,
@@ -44,7 +41,3 @@ class WebHive(object):
 			location_piece.b,
 			location_piece.piece_type
 			)
-
-	#radius = 153
-	#this specific radius is special for the image source
-

@@ -4,7 +4,6 @@ class MoveValidator(object):
 		piece_type = pieces_dict[start_hex_coord].piece_type
 		if self.flood(start_hex_coord, pieces_dict):
 			if not self.space_has_piece_in_it(end_hex_coord, pieces_dict):
-				#if self.is_adjacent_to_the_hive(end_hex_coord,pieces_dict):
 				if end_hex_coord in self.empty_spots_adjacent_to_hive(pieces_dict):	
 					if self.piece_validity(piece_type, start_hex_coord, end_hex_coord, pieces_dict):
 						return True
@@ -22,6 +21,8 @@ class MoveValidator(object):
 			return self.queen_valid_move(start_hex_coord, end_hex_coord, pieces_dict)
 		elif piece_type == 'grasshopper':
 			return self.grasshopper_valid_move(start_hex_coord, end_hex_coord, pieces_dict)
+		elif piece_type == 'ant':
+			return self.ant_valid_move(start_hex_coord, end_hex_coord, pieces_dict)
 		else:
 			return True
 		
@@ -42,7 +43,8 @@ class MoveValidator(object):
 					return True
 		else:
 			return False
-
+	def ant_valid_move(self,start_hex_coord, end_hex_coord, pieces_dict):
+		return end_hex_coord in self.spots_in_ant_path(start_hex_coord, pieces_dict)
 			
 	def all_spots_between_two_inline_spots(self, start_hex_coord, end_hex_coord):
 		delta = tuple(map(lambda pair: pair[1]-pair[0], zip(start_hex_coord, end_hex_coord)))

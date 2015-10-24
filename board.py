@@ -74,8 +74,6 @@ class Board(object):
 		
 	def move_piece(self, hex_coord, end_hex_coord):
 		if self.validator.is_valid_move(hex_coord, end_hex_coord, self.pieces_dict):
-			print "THISISISISISISISIS"
-			print self.pieces_dict
 			self.pieces_dict[end_hex_coord] = self.pieces_dict[hex_coord] 
 			self.pieces_dict.pop(hex_coord)
 			self.refresh_lp()
